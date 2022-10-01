@@ -1,10 +1,6 @@
 use std::sync::{Arc, Mutex};
 use std::thread;
 
-use std::fs::File;
-use std::io::BufReader;
-use std::io::prelude::*;
-
 use std::collections::HashSet;
 
 #[derive(Hash, Copy, Clone, Default, Eq, PartialEq, Debug)]
@@ -26,10 +22,8 @@ impl SantaMove {
 }
 
 fn read_file_async(mutex: Arc<Mutex<String>>) -> std::io::Result<()> {
-    let file = File::open("inputs/day-03.txt")?;
-    let mut buf_reader = BufReader::new(file);
     let mut content = mutex.lock().unwrap();
-    buf_reader.read_to_string(&mut content)?;
+    aoc2015::read_file("inputs/day-03.txt", &mut content)?;
     Ok(())
 }
 
@@ -69,7 +63,9 @@ fn part2(mutex: Arc<Mutex<String>>) -> std::io::Result<()> {
     Ok(())
 }
 
-fn solve() -> std::io::Result<()> {
+pub fn solve() -> std::io::Result<()> {
+    println!("Day 03");
+
     let content = Arc::new(Mutex::new(String::new()));
     let mut threads = Vec::new();
     {

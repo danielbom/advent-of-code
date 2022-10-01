@@ -1,6 +1,3 @@
-use std::fs::File;
-use std::io::BufReader;
-use std::io::prelude::*;
 use std::cmp::min;
 
 struct Dim {
@@ -49,12 +46,11 @@ fn part2(content: &str) -> u32 {
         .sum()
 }
 
-fn solve() -> std::io::Result<()> {
-    let file = File::open("inputs/day-02.txt")?;
-    let mut buf_reader = BufReader::new(file);
+pub fn solve() -> std::io::Result<()> {
     let mut content = String::new();
-    buf_reader.read_to_string(&mut content)?;
+    aoc2015::read_file("inputs/day-02.txt", &mut content)?;
     
+    println!("Day 02");
     println!("Part 1: {}", part1(&content));
     println!("Part 2: {}", part2(&content));
 

@@ -29,6 +29,7 @@ pub fn solve() -> std::io::Result<()> {
     aoc2015::read_file("inputs/day-04.txt", &mut content)?;
     let content = content.trim_end();
 
+    println!("Day 04");
     part1(content);
     part2(content);
 
