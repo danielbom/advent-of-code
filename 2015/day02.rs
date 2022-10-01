@@ -24,7 +24,7 @@ impl Dim {
 
     fn smallest_perimeter(&self) -> u32 {
         let mut xs = vec![self.l, self.w, self.h];
-        xs.sort();
+        xs.sort_unstable();
         2 * (xs[0] + xs[1])
     }
 
