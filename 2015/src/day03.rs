@@ -69,7 +69,7 @@ fn part2(mutex: Arc<Mutex<String>>) -> std::io::Result<()> {
     Ok(())
 }
 
-fn main() -> std::io::Result<()> {
+fn solve() -> std::io::Result<()> {
     let content = Arc::new(Mutex::new(String::new()));
     let mut threads = Vec::new();
     {

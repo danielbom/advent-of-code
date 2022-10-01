@@ -49,7 +49,7 @@ fn part2(content: &str) -> u32 {
         .sum()
 }
 
-fn main() -> std::io::Result<()> {
+fn solve() -> std::io::Result<()> {
     let file = File::open("inputs/day-02.txt")?;
     let mut buf_reader = BufReader::new(file);
     let mut content = String::new();

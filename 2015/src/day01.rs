@@ -32,7 +32,7 @@ fn part2(text: &str) -> i32 {
     -1
 }
 
-fn main() -> std::io::Result<()> {
+fn solve() -> std::io::Result<()> {
     let mut content = String::new();
     read_file("inputs/day-01.txt", &mut content)?;
 
