@@ -1,9 +1,61 @@
+use std::iter::Iterator;
 use std::cell::RefCell;
 use std::rc::Rc;
-use regex::Regex;
+use regex::{Regex, Captures};
 
 struct Grid<T : Copy> {
     grid: Vec<Vec<T>>
+}
+
+struct Parser {
+    re: Regex,
+}
+
+enum ParseMessage {
+    Toggle,
+    TurnOn,
+    TurnOff
+}
+
+struct ParseItem {
+    message: ParseMessage,
+    x1: usize,
+    y1: usize,
+    x2: usize,
+    y2: usize,
+}
+
+impl ParseMessage {
+    fn parse<'a>(message: &'a str) -> Self {
+        match message {
+            "toggle"   => ParseMessage::Toggle,
+            "turn on"  => ParseMessage::TurnOn,
+            "turn off" => ParseMessage::TurnOff,
+            _          => panic!("Invalid message: {}", message)
+        }
+    }
+}
+
+impl ParseItem {
+    fn from<'a>(it: Captures<'a>) -> Self {
+        let message = ParseMessage::parse(&it[1]);
+        let &x1 = &it[2].parse::<usize>().unwrap();
+        let &y1 = &it[3].parse::<usize>().unwrap();
+        let &x2 = &it[4].parse::<usize>().unwrap();
+        let &y2 = &it[5].parse::<usize>().unwrap();
+        Self { message, x1, y1, x2, y2 }
+    }
+}
+
+impl Parser {
+    fn new() -> Self {
+        let re = Regex::new("(?m)^(turn on|turn off|toggle) (\\d+),(\\d+) through (\\d+),(\\d+)$").unwrap();
+        Parser { re }
+    }
+
+    fn parse<T>(&self, content: &String, initial: T, fold: fn(T, ParseItem) -> T) -> T {
+        self.re.captures_iter(&content).map(ParseItem::from).fold(initial, fold)
+    }
 }
 
 impl <T : Copy> Grid<T> {
@@ -11,74 +63,73 @@ impl <T : Copy> Grid<T> {
         Self { grid: vec![vec![initial; 1000]; 1000] }
     }
 
-    fn slice_mut(&mut self, x1: usize, y1: usize, x2: usize, y2: usize, mut map: impl FnMut(&T) -> T) {
-        for x in x1..x2 + 1 {
-            for y in y1..y2 + 1 {
+    fn slice_mut(&mut self, item: &ParseItem, mut map: impl FnMut(&T) -> T) {
+        for x in item.x1..item.x2 + 1 {
+            for y in item.y1..item.y2 + 1 {
                 self.grid[x][y] = map(&self.grid[x][y]);
             }
         }
     }
 }
 
-fn parse_with(content: &String, mut callback: impl FnMut(&str, usize, usize, usize, usize)) {
-    let re: Regex = Regex::new("(?m)^(turn on|turn off|toggle) (\\d+),(\\d+) through (\\d+),(\\d+)$").unwrap();
-    for it in re.captures_iter(&content) {
-        let &x1 = &it[2].parse::<usize>().unwrap();
-        let &y1 = &it[3].parse::<usize>().unwrap();
-        let &x2 = &it[4].parse::<usize>().unwrap();
-        let &y2 = &it[5].parse::<usize>().unwrap();
-        callback(&it[1], x1, y1, x2, y2);
+impl Grid<bool> {
+    fn count(&self) -> u32 {
+        let mut count = 0;
+        for row in self.grid.iter() {
+            for it in row.iter() {
+                if *it {
+                    count += 1;
+                }
+            }
+        }
+        count
+    }
+}
+
+impl Grid<u32> {
+    fn sum(&self) -> u32 {
+        let mut sum = 0;
+        for row in self.grid.iter() {
+            for it in row.iter() {
+                sum += *it;
+            }
+        }
+        sum
     }
 }
 
 fn part1(content: &String) -> u32 {
     let rc_grid = Rc::new(RefCell::new(Grid::new(false)));
-    let mut grid = rc_grid.borrow_mut();
 
-    parse_with(&content, move |message, x1, y1, x2, y2| {
-        match message {
-            "turn on" => grid.slice_mut(x1, y1, x2, y2, |_| true),
-            "turn off" => grid.slice_mut(x1, y1, x2, y2, |_| false),
-            "toggle" => grid.slice_mut(x1, y1, x2, y2, |it| !it),
-            _ => panic!("Unexpected input: {}", message),
-        }
+    let grid = rc_grid.borrow_mut();
+    Parser::new().parse(content, grid, |mut grid, item| {
+        match item.message {
+            ParseMessage::TurnOn => grid.slice_mut(&item, |_| true),
+            ParseMessage::TurnOff => grid.slice_mut(&item, |_| false),
+            ParseMessage::Toggle => grid.slice_mut(&item, |it| !it),
+        };
+        grid
     });
 
     let grid = rc_grid.borrow();
-    let mut count = 0;
-    for x in 0..1000 {
-        for y in 0..1000 {
-            if grid.grid[x][y] {
-                count += 1
-            } 
-        } 
-    } 
-
-    count
+    grid.count()
 }
 
-fn part2(content: &String) -> i32 {
+fn part2(content: &String) -> u32 {
     let rc_grid = Rc::new(RefCell::new(Grid::new(0)));
-    let mut grid = rc_grid.borrow_mut();
 
-    parse_with(&content, move |message, x1, y1, x2, y2| {
-        match message {
-            "turn on" => grid.slice_mut(x1, y1, x2, y2, |it| it + 1),
-            "turn off" => grid.slice_mut(x1, y1, x2, y2, |it| if *it == 0 { 0 } else { it - 1 }),
-            "toggle" => grid.slice_mut(x1, y1, x2, y2, |it| it + 2),
-            _ => panic!("Unexpected input: {}", message),
-        }
+    let grid = rc_grid.borrow_mut();
+    Parser::new().parse(content, grid, |mut grid, item| {
+        match item.message {
+            ParseMessage::TurnOn => grid.slice_mut(&item, |it| it + 1),
+            ParseMessage::TurnOff => grid.slice_mut(&item, |it| if *it == 0 { 0 } else { it - 1 }),
+            ParseMessage::Toggle => grid.slice_mut(&item, |it| it + 2),
+        };
+        grid
     });
-
+    
     let grid = rc_grid.borrow();
-    let mut count = 0;
-    for x in 0..1000 {
-        for y in 0..1000 {
-            count += grid.grid[x][y];
-        } 
-    } 
-
-    count
+    grid.sum()
 }
 
 pub fn solve() -> std::io::Result<()> {
