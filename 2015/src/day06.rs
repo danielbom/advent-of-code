@@ -64,8 +64,8 @@ impl <T : Copy> Grid<T> {
     }
 
     fn slice_mut(&mut self, item: &ParseItem, mut map: impl FnMut(&T) -> T) {
-        for x in item.x1..item.x2 + 1 {
-            for y in item.y1..item.y2 + 1 {
+        for x in item.x1..=item.x2 {
+            for y in item.y1..=item.y2 {
                 self.grid[x][y] = map(&self.grid[x][y]);
             }
         }
