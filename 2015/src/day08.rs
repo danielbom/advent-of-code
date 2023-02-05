@@ -23,7 +23,7 @@ fn part1(content: &str) -> i32 {
         .map(|line| (count_characters(line), count_regex(&re, line)))
         .fold((0, 0), |acc, curr| (acc.0 + curr.0, acc.1 + curr.1));
 
-    return total_characters as i32 - total_codes as i32;
+    total_characters as i32 - total_codes as i32
 }
 
 fn part2(content: &str) -> i32 {
