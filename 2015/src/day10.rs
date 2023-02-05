@@ -1,15 +1,15 @@
-struct GroupChars<'a> {
+struct CountGroupChars<'a> {
     chars: &'a str,
     index: usize,
 }
 
-impl<'a> GroupChars<'a> {
-    fn new(chars: &'a str) -> GroupChars<'a> {
-        GroupChars { chars, index: 0 }
+impl<'a> CountGroupChars<'a> {
+    fn new(chars: &'a str) -> CountGroupChars<'a> {
+        CountGroupChars { chars, index: 0 }
     }
 }
 
-impl Iterator for GroupChars<'_> {
+impl Iterator for CountGroupChars<'_> {
     type Item = (char, u32);
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -31,9 +31,9 @@ impl Iterator for GroupChars<'_> {
 }
 
 fn transform(input: &str) -> String {
-    return GroupChars::new(input)
+    CountGroupChars::new(input)
         .map(|(c, count)| format!("{}{}", count, c))
-        .collect::<String>();
+        .collect()
 }
 
 fn transform_times(input: &str, n: usize) -> String {
