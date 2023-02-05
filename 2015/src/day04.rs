@@ -1,59 +1,56 @@
 use md5;
-use std::sync::{mpsc, Arc};
-use std::thread;
-use std::time;
+use std::sync::{mpsc, Arc, Mutex};
+use std::{thread, time};
 
-const THREADS_COUNT: i32 = 12;
+const THREADS_COUNT: i32 = 8;
 const TRIES: i32 = 1000;
 
 fn compute(content: &str, start: &str) -> i32 {
-    let (tx, rx) = mpsc::sync_channel(THREADS_COUNT as usize);
-    let tx = Arc::new(tx);
+    let (result_tx, result_rx) = mpsc::sync_channel(THREADS_COUNT as usize);
+    let (range_tx, range_rx) = mpsc::sync_channel(THREADS_COUNT as usize);
+    let result_tx = Arc::new(result_tx);
+    let range_rx = Arc::new(Mutex::new(range_rx));
     let content = Arc::new(content.to_string());
     let start = Arc::new(start.to_string());
-
-    let mut result: Option<i32> = None;
     let mut count = 0;
-    while result.is_none() {
-        let mut threads = Vec::with_capacity(THREADS_COUNT as usize);
+    let produce = &mut || {
+        range_tx.send(Some(count)).unwrap();
+        count += 1;
+    };
 
-        for _ in 0..THREADS_COUNT {
-            let content = content.clone();
-            let start = start.clone();
-            let tx = tx.clone();
-            threads.push(thread::spawn(move || {
-                let begin = count * TRIES;
-                let end = begin + TRIES;
-                for j in begin..end {
-                    let input = format!("{}{}", content, j);
-                    let digest = md5::compute(input);
-                    let digest = format!("{:x}", digest);
-                    if digest.starts_with(&format!("{}", start)) {
-                        tx.send(Some(j)).unwrap();
-                        return;
-                    }
+    for _ in 0..THREADS_COUNT {
+        produce();
+        let content = content.clone();
+        let start = start.clone();
+        let result_tx = result_tx.clone();
+        let range_rx = range_rx.clone();
+        thread::spawn(move || loop {
+            let count = {
+                match range_rx.lock().unwrap().recv() {
+                    Ok(Some(from)) => from,
+                    Ok(None) => return,
+                    Err(_) => return,
                 }
-                tx.send(None).unwrap();
-            }));
-            count += 1;
-        }
+            };
+            let from = count * TRIES;
 
-        threads.into_iter().for_each(|it| {
-            if let Some(thread_result) = rx.recv().unwrap() {
-                if let Some(final_result) = result {
-                    if final_result > thread_result {
-                        result = Some(thread_result);
-                    }
-                } else {
-                    result = Some(thread_result);
-                }
-            }
+            let result = (from..from + TRIES).find(|j| {
+                let input = format!("{}{}", content, j);
+                let digest = md5::compute(input);
+                let digest = format!("{:x}", digest);
+                digest.starts_with(&format!("{}", start))
+            });
 
-            it.join().unwrap();
+            result_tx.send(result).ok().unwrap_or_default()
         });
     }
 
-    result.unwrap_or(0)
+    loop {
+        match result_rx.recv().unwrap() {
+            Some(result) => return result,
+            None => produce(),
+        }
+    }
 }
 
 #[allow(dead_code)]
