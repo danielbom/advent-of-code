@@ -1,6 +1,5 @@
 use std::collections::HashSet;
 
-
 trait Rule {
     fn reset(&mut self);
     fn is_valid(&self) -> bool;
@@ -17,7 +16,11 @@ impl HasForbidSeq {
     fn new() -> Self {
         let sequences = vec!["ab", "cd", "pq", "xy"];
         let sequences = sequences.iter().map(|it| it.to_string()).collect();
-        Self { last: None, valid: true, sequences }
+        Self {
+            last: None,
+            valid: true,
+            sequences,
+        }
     }
 }
 
@@ -30,7 +33,9 @@ impl Rule for HasForbidSeq {
         self.valid
     }
     fn feed(&mut self, ch: char) {
-        if !self.is_valid() { return; }
+        if !self.is_valid() {
+            return;
+        }
 
         if let Some(lch) = self.last {
             let seq = vec![lch, ch];
@@ -61,7 +66,9 @@ impl Rule for Has3Vowels {
         self.count >= 3
     }
     fn feed(&mut self, ch: char) {
-        if self.is_valid() { return; }
+        if self.is_valid() {
+            return;
+        }
 
         if self.vowels.contains(ch) {
             self.count += 1;
@@ -76,7 +83,10 @@ struct HasSeq2 {
 
 impl HasSeq2 {
     fn new() -> Self {
-        Self { last: None, valid: false }
+        Self {
+            last: None,
+            valid: false,
+        }
     }
 }
 
@@ -89,7 +99,9 @@ impl Rule for HasSeq2 {
         self.valid
     }
     fn feed(&mut self, ch: char) {
-        if self.is_valid() { return; }
+        if self.is_valid() {
+            return;
+        }
 
         if let Some(lch) = self.last {
             self.valid = lch == ch;
@@ -107,7 +119,11 @@ struct HasSeq2With1Gap {
 
 impl HasSeq2With1Gap {
     fn new() -> Self {
-        Self { last2: None, last: None, valid: false }
+        Self {
+            last2: None,
+            last: None,
+            valid: false,
+        }
     }
 }
 
@@ -121,7 +137,9 @@ impl Rule for HasSeq2With1Gap {
         self.valid
     }
     fn feed(&mut self, ch: char) {
-        if self.is_valid() { return; }
+        if self.is_valid() {
+            return;
+        }
 
         if self.last.is_some() {
             if let Some(l2ch) = self.last2 {
@@ -143,7 +161,12 @@ struct ContainsTwicePair {
 
 impl ContainsTwicePair {
     fn new() -> Self {
-        Self { valid: false, last: None, last_pair: None, last_pairs: HashSet::new() }
+        Self {
+            valid: false,
+            last: None,
+            last_pair: None,
+            last_pairs: HashSet::new(),
+        }
     }
 }
 
@@ -158,7 +181,9 @@ impl Rule for ContainsTwicePair {
         self.valid
     }
     fn feed(&mut self, ch: char) {
-        if self.is_valid() { return; }
+        if self.is_valid() {
+            return;
+        }
 
         if let Some(lch) = self.last {
             let pair = (lch, ch);
@@ -186,7 +211,7 @@ impl IsNice {
                 Box::new(HasSeq2::new()),
                 Box::new(Has3Vowels::new()),
                 Box::new(HasForbidSeq::new()),
-            ]
+            ],
         }
     }
 
@@ -194,8 +219,8 @@ impl IsNice {
         Self {
             rules: vec![
                 Box::new(HasSeq2With1Gap::new()),
-                Box::new(ContainsTwicePair::new()), 
-            ]
+                Box::new(ContainsTwicePair::new()),
+            ],
         }
     }
 

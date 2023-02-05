@@ -1,10 +1,10 @@
-use std::iter::Iterator;
+use regex::{Captures, Regex};
 use std::cell::RefCell;
+use std::iter::Iterator;
 use std::rc::Rc;
-use regex::{Regex, Captures};
 
-struct Grid<T : Copy> {
-    grid: Vec<Vec<T>>
+struct Grid<T: Copy> {
+    grid: Vec<Vec<T>>,
 }
 
 struct Parser {
@@ -14,7 +14,7 @@ struct Parser {
 enum ParseMessage {
     Toggle,
     TurnOn,
-    TurnOff
+    TurnOff,
 }
 
 struct ParseItem {
@@ -28,10 +28,10 @@ struct ParseItem {
 impl ParseMessage {
     fn parse<'a>(message: &'a str) -> Self {
         match message {
-            "toggle"   => ParseMessage::Toggle,
-            "turn on"  => ParseMessage::TurnOn,
+            "toggle" => ParseMessage::Toggle,
+            "turn on" => ParseMessage::TurnOn,
             "turn off" => ParseMessage::TurnOff,
-            _          => panic!("Invalid message: {}", message)
+            _ => panic!("Invalid message: {}", message),
         }
     }
 }
@@ -43,24 +43,36 @@ impl ParseItem {
         let &y1 = &it[3].parse::<usize>().unwrap();
         let &x2 = &it[4].parse::<usize>().unwrap();
         let &y2 = &it[5].parse::<usize>().unwrap();
-        Self { message, x1, y1, x2, y2 }
+        Self {
+            message,
+            x1,
+            y1,
+            x2,
+            y2,
+        }
     }
 }
 
 impl Parser {
     fn new() -> Self {
-        let re = Regex::new("(?m)^(turn on|turn off|toggle) (\\d+),(\\d+) through (\\d+),(\\d+)$").unwrap();
+        let re = Regex::new("(?m)^(turn on|turn off|toggle) (\\d+),(\\d+) through (\\d+),(\\d+)$")
+            .unwrap();
         Parser { re }
     }
 
     fn parse<T>(&self, content: &String, initial: T, fold: fn(T, ParseItem) -> T) -> T {
-        self.re.captures_iter(&content).map(ParseItem::from).fold(initial, fold)
+        self.re
+            .captures_iter(&content)
+            .map(ParseItem::from)
+            .fold(initial, fold)
     }
 }
 
-impl <T : Copy> Grid<T> {
+impl<T: Copy> Grid<T> {
     fn new(initial: T) -> Self {
-        Self { grid: vec![vec![initial; 1000]; 1000] }
+        Self {
+            grid: vec![vec![initial; 1000]; 1000],
+        }
     }
 
     fn slice_mut(&mut self, item: &ParseItem, mut map: impl FnMut(&T) -> T) {
@@ -127,7 +139,7 @@ fn part2(content: &String) -> u32 {
         };
         grid
     });
-    
+
     let grid = rc_grid.borrow();
     grid.sum()
 }
@@ -142,4 +154,3 @@ pub fn solve() -> std::io::Result<()> {
 
     Ok(())
 }
-

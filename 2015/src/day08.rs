@@ -1,4 +1,4 @@
-use regex::{Regex};
+use regex::Regex;
 
 fn tokenizer_codes() -> Regex {
     Regex::new(r#"\\x[\da-f]{1,2}|\\["\\]|\w"#).unwrap()
@@ -61,7 +61,10 @@ mod tests {
         let input = sample_fixture();
         let inputs = input.lines().collect::<Vec<_>>();
         let expected = vec![0, 3, 7, 1];
-        let result = inputs.iter().map(|it| count_regex(&re, it)).collect::<Vec<_>>();
+        let result = inputs
+            .iter()
+            .map(|it| count_regex(&re, it))
+            .collect::<Vec<_>>();
 
         assert_eq!(expected, result);
     }
@@ -81,7 +84,10 @@ mod tests {
         let input = sample_fixture();
         let inputs = input.lines().collect::<Vec<_>>();
         let expected = vec![2, 2, 4, 3];
-        let result = inputs.iter().map(|it| count_regex(&re, it)).collect::<Vec<_>>();
+        let result = inputs
+            .iter()
+            .map(|it| count_regex(&re, it))
+            .collect::<Vec<_>>();
 
         assert_eq!(expected, result);
     }

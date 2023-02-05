@@ -16,7 +16,7 @@ impl SantaMove {
             '<' => self.x -= 1,
             '^' => self.y += 1,
             'v' => self.y -= 1,
-            _   => {}
+            _ => {}
         }
     }
 }

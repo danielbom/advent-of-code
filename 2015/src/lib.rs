@@ -1,6 +1,6 @@
 use std::fs::File;
-use std::io::BufReader;
 use std::io::prelude::*;
+use std::io::BufReader;
 
 pub fn read_file(filename: &str, mut content: &mut String) -> std::io::Result<()> {
     let file = File::open(filename)?;
@@ -8,4 +8,3 @@ pub fn read_file(filename: &str, mut content: &mut String) -> std::io::Result<()
     buf_reader.read_to_string(&mut content)?;
     Ok(())
 }
-

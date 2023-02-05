@@ -3,13 +3,20 @@ use std::cmp::min;
 struct Dim {
     l: u32,
     w: u32,
-    h: u32
+    h: u32,
 }
 
 impl Dim {
     fn parse(text: &str) -> Self {
-        let parts = text.split("x").map(|it| it.parse().unwrap()).collect::<Vec<_>>();
-        Self { l: parts[0], w: parts[1], h: parts[2] }
+        let parts = text
+            .split("x")
+            .map(|it| it.parse().unwrap())
+            .collect::<Vec<_>>();
+        Self {
+            l: parts[0],
+            w: parts[1],
+            h: parts[2],
+        }
     }
 
     fn surface_area(&self) -> u32 {
@@ -49,11 +56,10 @@ fn part2(content: &str) -> u32 {
 pub fn solve() -> std::io::Result<()> {
     let mut content = String::new();
     aoc2015::read_file("inputs/day-02.txt", &mut content)?;
-    
+
     println!("Day 02");
     println!("Part 1: {}", part1(&content));
     println!("Part 2: {}", part2(&content));
 
     Ok(())
 }
-

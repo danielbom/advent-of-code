@@ -1,7 +1,7 @@
-use std::time;
-use std::thread;
-use std::sync::{mpsc,Arc};
 use md5;
+use std::sync::{mpsc, Arc};
+use std::thread;
+use std::time;
 
 const THREADS_COUNT: i32 = 12;
 const TRIES: i32 = 1000;
@@ -60,13 +60,13 @@ fn compute(content: &str, start: &str) -> i32 {
 fn compute1(content: &str, start: &str) -> u32 {
     let mut count = 0;
     loop {
-       let input = format!("{}{}", content, count);
-       let digest = md5::compute(input);
-       let digest = format!("{:x}", digest);
-       if digest.starts_with(start) {
-           break;
-       }
-       count += 1;
+        let input = format!("{}{}", content, count);
+        let digest = md5::compute(input);
+        let digest = format!("{:x}", digest);
+        if digest.starts_with(start) {
+            break;
+        }
+        count += 1;
     }
     count
 }

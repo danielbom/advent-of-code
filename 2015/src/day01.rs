@@ -2,7 +2,7 @@ fn part1(text: &str) -> i32 {
     text.chars().fold(0, |floor, ch| match ch {
         '(' => floor + 1,
         ')' => floor - 1,
-        _   => floor
+        _ => floor,
     })
 }
 
@@ -12,7 +12,7 @@ fn part2(text: &str) -> i32 {
         match ch {
             '(' => floor += 1,
             ')' => floor -= 1,
-            _   => {}
+            _ => {}
         }
         if floor == -1 {
             return i as i32 + 1;

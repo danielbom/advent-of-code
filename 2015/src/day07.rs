@@ -1,6 +1,5 @@
 use std::collections::{HashMap, VecDeque};
 
-
 #[derive(Debug)]
 enum Atom<'a> {
     Key(&'a str),
@@ -43,21 +42,21 @@ enum Op<'a> {
 #[derive(Debug)]
 struct Gate<'a> {
     op: Op<'a>,
-    output: &'a str
+    output: &'a str,
 }
 
 impl<'a> Atom<'a> {
     fn parse(atom: &'a str) -> Atom<'a> {
         match atom.parse() {
             Ok(value) => Atom::Value(value),
-            Err(_) => Atom::Key(atom)
+            Err(_) => Atom::Key(atom),
         }
     }
 
     fn key(&self) -> Option<&str> {
         match self {
             Atom::Key(key) => Some(key),
-            _              => None,
+            _ => None,
         }
     }
 }
@@ -66,7 +65,7 @@ impl Kind1 {
     fn resolve(&self, val: u16) -> u16 {
         match self {
             Kind1::Assign => val,
-            Kind1::Not    => !val,
+            Kind1::Not => !val,
         }
     }
 }
@@ -74,8 +73,8 @@ impl Kind1 {
 impl Kind2 {
     fn resolve(&self, lhs: u16, rhs: u16) -> u16 {
         match self {
-            Kind2::And    => lhs & rhs,
-            Kind2::Or     => lhs | rhs,
+            Kind2::And => lhs & rhs,
+            Kind2::Or => lhs | rhs,
             Kind2::RShift => lhs >> rhs,
             Kind2::LShift => lhs << rhs,
         }
@@ -87,7 +86,7 @@ impl Kind2 {
             "OR" => Some(Kind2::Or),
             "RSHIFT" => Some(Kind2::RShift),
             "LSHIFT" => Some(Kind2::LShift),
-            _ => None
+            _ => None,
         }
     }
 }
@@ -109,7 +108,7 @@ impl<'a> Op<'a> {
                 kind: Kind1::Assign,
                 value: Atom::parse(var),
             })),
-            _ => None
+            _ => None,
         }
     }
 }
@@ -173,36 +172,32 @@ impl<'a> Machine<'a> {
             let gate = self.gates.get(key)?;
 
             match &gate.op {
-                Op::Unary(op) => {
-                    match self.get_atom(&op.value) {
-                        Some(value) => {
-                            self.values.insert(gate.output, op.kind.resolve(value));
-                        },
-                        None => {
-                            let key1 = op.value.key()?;
-                            stack.push_back(key);
+                Op::Unary(op) => match self.get_atom(&op.value) {
+                    Some(value) => {
+                        self.values.insert(gate.output, op.kind.resolve(value));
+                    }
+                    None => {
+                        let key1 = op.value.key()?;
+                        stack.push_back(key);
+                        stack.push_back(key1);
+                    }
+                },
+                Op::Binary(op) => match (self.get_atom(&op.lhs), self.get_atom(&op.rhs)) {
+                    (Some(lhs), Some(rhs)) => {
+                        self.values.insert(gate.output, op.kind.resolve(lhs, rhs));
+                    }
+                    _ => {
+                        stack.push_back(key);
+                        if let Some(key2) = op.rhs.key() {
+                            stack.push_back(key2);
+                        }
+                        if let Some(key1) = op.lhs.key() {
                             stack.push_back(key1);
                         }
                     }
                 },
-                Op::Binary(op) => {
-                    match (self.get_atom(&op.lhs), self.get_atom(&op.rhs)) {
-                        (Some(lhs), Some(rhs)) => {
-                            self.values.insert(gate.output, op.kind.resolve(lhs, rhs));
-                        },
-                        _ => {
-                            stack.push_back(key);
-                            if let Some(key2) = op.rhs.key() {
-                                stack.push_back(key2);
-                            }
-                            if let Some(key1) = op.lhs.key() {
-                                stack.push_back(key1);
-                            }
-                        },
-                    }
-                }
             }
-        };
+        }
 
         self.values.get(key).map(|it| *it)
     }
@@ -270,7 +265,11 @@ mod tests {
         NOT y -> i";
 
         let mut machine = Machine::parse(input);
-        let keys = machine.gates.keys().map(|it| it.to_string()).collect::<Vec<String>>();
+        let keys = machine
+            .gates
+            .keys()
+            .map(|it| it.to_string())
+            .collect::<Vec<String>>();
         for key in keys {
             machine.compute(&key);
         }
@@ -278,7 +277,5 @@ mod tests {
         let result = machine.values;
 
         assert_eq!(expected, result);
-
     }
 }
-
