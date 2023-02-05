@@ -6,6 +6,24 @@ trait Rule {
     fn feed(&mut self, ch: char);
 }
 
+macro_rules! impl_rule_extras {
+    ($($t:ty),+ $(,)?) => ($(
+        impl $t {
+            fn feed_content(&mut self, content: &str) {
+                for ch in content.chars() {
+                    self.feed(ch);
+                }
+            }
+
+            fn validate(&mut self, content: &str) -> bool {
+                self.reset();
+                self.feed_content(content);
+                self.is_valid()
+            }
+        }
+    )+)
+}
+
 struct HasForbidSeq {
     last: Option<char>,
     sequences: Vec<String>,
@@ -223,17 +241,23 @@ impl IsNice {
             ],
         }
     }
+}
 
-    fn validate(&mut self, content: &str) -> bool {
+impl Rule for IsNice {
+    fn reset(&mut self) {
         self.rules.iter_mut().for_each(|it| it.reset());
+    }
 
-        for ch in content.chars() {
-            self.rules.iter_mut().for_each(|it| it.feed(ch));
-        }
+    fn is_valid(&self) -> bool {
+        self.rules.iter().all(|it| it.is_valid())
+    }
 
-        self.rules.iter().fold(true, |acc, it| acc && it.is_valid())
+    fn feed(&mut self, ch: char) {
+        self.rules.iter_mut().for_each(|it| it.feed(ch));
     }
 }
+
+impl_rule_extras!(IsNice);
 
 fn compute(content: &String, is_nice: &mut IsNice) -> u32 {
     content.lines().filter(|it| is_nice.validate(it)).count() as u32
