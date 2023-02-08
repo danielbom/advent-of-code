@@ -51,7 +51,10 @@ fn part2(content: &str) -> usize {
 pub fn solve() -> std::io::Result<()> {
     let mut content = String::new();
     aoc2015::read_file("inputs/day-10.txt", &mut content)?;
+
+    println!("Day 10");
     println!("Day 09 Part 1: {}", part1(&content));
     println!("Day 09 Part 2: {}", part2(&content));
+
     Ok(())
 }
