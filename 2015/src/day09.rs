@@ -166,7 +166,7 @@ pub fn solve() -> std::io::Result<()> {
     aoc2015::read_file("inputs/day-09.txt", &mut content)?;
 
     println!("Day 09");
-    println!("Part 1: {}", part1(&content)); // Not is: [246]
+    println!("Part 1: {}", part1(&content));
     println!("Part 2: {}", part2(&content));
 
     Ok(())
