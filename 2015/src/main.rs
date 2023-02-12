@@ -12,6 +12,7 @@ mod day11;
 mod day12;
 mod day13;
 mod day14;
+mod day15;
 
 fn main() -> std::io::Result<()> {
     let day = std::env::args().nth(1).expect("Expect the [day] argument");
@@ -33,6 +34,7 @@ fn main() -> std::io::Result<()> {
         12 => day12::solve(),
         13 => day13::solve(),
         14 => day14::solve(),
+        15 => day15::solve(),
         _ => panic!("Invalid [day] passed: {}", day),
     }
 }
