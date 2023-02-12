@@ -1,4 +1,4 @@
-use md5;
+
 use std::sync::{mpsc, Arc, Mutex};
 use std::{thread, time};
 

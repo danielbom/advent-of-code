@@ -71,24 +71,19 @@ fn dfs<'a, Consume>(
                 depth: node.depth + 1,
             };
             consume(&new_node);
-            dfs(&graph, &new_node, &current_visited, consume);
+            dfs(graph, &new_node, &current_visited, consume);
         }
     }
 }
 
 fn parse_content(content: &str) -> Vec<Road> {
-    content
-        .lines()
-        .map(|it| Road::parse(it))
-        .flatten()
-        .collect()
+    content.lines().flat_map(Road::parse).collect()
 }
 
-fn collect_cities<'a>(roads: &'a Vec<Road<'a>>) -> Vec<&'a str> {
+fn collect_cities<'a>(roads: &'a [Road<'a>]) -> Vec<&'a str> {
     roads
         .iter()
-        .map(|it| vec![it.city1, it.city2])
-        .flatten()
+        .flat_map(|it| vec![it.city1, it.city2])
         .collect::<HashSet<_>>()
         .into_iter()
         .collect()
@@ -116,10 +111,8 @@ fn part1(content: &str) -> i32 {
     let cities_count = cities.len() as u16;
     let mut min_distance = i32::MAX;
     let find_min_distance = &mut |it: &DfsNode| {
-        if it.depth == cities_count - 1 {
-            if it.distance < min_distance {
-                min_distance = it.distance;
-            }
+        if it.depth == cities_count - 1 && it.distance < min_distance {
+            min_distance = it.distance;
         }
     };
 
@@ -142,10 +135,8 @@ fn part2(content: &str) -> i32 {
     let cities_count = cities.len() as u16;
     let mut max_distance = 0;
     let find_min_distance = &mut |it: &DfsNode| {
-        if it.depth == cities_count - 1 {
-            if it.distance > max_distance {
-                max_distance = it.distance;
-            }
+        if it.depth == cities_count - 1 && it.distance > max_distance {
+            max_distance = it.distance;
         }
     };
 

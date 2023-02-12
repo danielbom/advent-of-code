@@ -26,7 +26,7 @@ struct ParseItem {
 }
 
 impl ParseMessage {
-    fn parse<'a>(message: &'a str) -> Self {
+    fn parse(message: &'_ str) -> Self {
         match message {
             "toggle" => ParseMessage::Toggle,
             "turn on" => ParseMessage::TurnOn,
@@ -37,7 +37,7 @@ impl ParseMessage {
 }
 
 impl ParseItem {
-    fn from<'a>(it: Captures<'a>) -> Self {
+    fn from(it: Captures<'_>) -> Self {
         let message = ParseMessage::parse(&it[1]);
         let &x1 = &it[2].parse::<usize>().unwrap();
         let &y1 = &it[3].parse::<usize>().unwrap();
@@ -60,9 +60,9 @@ impl Parser {
         Parser { re }
     }
 
-    fn parse<T>(&self, content: &String, initial: T, fold: fn(T, ParseItem) -> T) -> T {
+    fn parse<T>(&self, content: &str, initial: T, fold: fn(T, ParseItem) -> T) -> T {
         self.re
-            .captures_iter(&content)
+            .captures_iter(content)
             .map(ParseItem::from)
             .fold(initial, fold)
     }
@@ -110,7 +110,7 @@ impl Grid<u32> {
     }
 }
 
-fn part1(content: &String) -> u32 {
+fn part1(content: &str) -> u32 {
     let rc_grid = Rc::new(RefCell::new(Grid::new(false)));
 
     let grid = rc_grid.borrow_mut();
@@ -127,7 +127,7 @@ fn part1(content: &String) -> u32 {
     grid.count()
 }
 
-fn part2(content: &String) -> u32 {
+fn part2(content: &str) -> u32 {
     let rc_grid = Rc::new(RefCell::new(Grid::new(0)));
 
     let grid = rc_grid.borrow_mut();

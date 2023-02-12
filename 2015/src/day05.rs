@@ -259,15 +259,15 @@ impl Rule for IsNice {
 
 impl_rule_extras!(IsNice);
 
-fn compute(content: &String, is_nice: &mut IsNice) -> u32 {
+fn compute(content: &str, is_nice: &mut IsNice) -> u32 {
     content.lines().filter(|it| is_nice.validate(it)).count() as u32
 }
 
-fn part1(content: &String) -> u32 {
+fn part1(content: &str) -> u32 {
     compute(content, &mut IsNice::new1())
 }
 
-fn part2(content: &String) -> u32 {
+fn part2(content: &str) -> u32 {
     compute(content, &mut IsNice::new2())
 }
 

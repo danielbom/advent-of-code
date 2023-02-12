@@ -33,7 +33,7 @@ impl Reindeer {
     }
 
     fn parse_lines(content: &str) -> Vec<Reindeer> {
-        content.split("\n").flat_map(Reindeer::parse).collect()
+        content.split('\n').flat_map(Reindeer::parse).collect()
     }
 
     fn total_move_in(&self, time_available: i32) -> i32 {
@@ -58,7 +58,7 @@ fn compute_points_by_distance(reindeers: Vec<Reindeer>, time_available: i32) -> 
 }
 
 fn part1(input: &str) -> i32 {
-    let reindeers = Reindeer::parse_lines(&input);
+    let reindeers = Reindeer::parse_lines(input);
     let time_available = 2503;
     compute_points_by_distance(reindeers, time_available)
 }
@@ -94,7 +94,7 @@ fn compute_points_by_leader_time(reindeers: Vec<Reindeer>, time_available: i32) 
 }
 
 fn part2(input: &str) -> i32 {
-    let reindeers = Reindeer::parse_lines(&input);
+    let reindeers = Reindeer::parse_lines(input);
     let time_available = 2503;
     compute_points_by_leader_time(reindeers, time_available)
 }

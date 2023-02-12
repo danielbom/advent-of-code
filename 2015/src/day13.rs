@@ -12,12 +12,12 @@ impl SittingNext {
     fn parse(input: &str) -> Option<SittingNext> {
         let mut parts = input.split(" would ");
         let who = parts.next()?.to_string();
-        let mut parts = parts.next()?.split(" ");
+        let mut parts = parts.next()?.split(' ');
         let gain = parts.next()?.eq("gain");
         let happiness = parts.next()?.parse::<i32>().ok()?;
         let happiness = if gain { happiness } else { -happiness };
         let mut parts = parts.skip(6);
-        let next = parts.next()?.strip_suffix(".")?.to_string();
+        let next = parts.next()?.strip_suffix('.')?.to_string();
 
         Some(SittingNext {
             who,
@@ -27,11 +27,11 @@ impl SittingNext {
     }
 
     fn parse_lines(input: &str) -> Vec<SittingNext> {
-        input.split("\n").flat_map(SittingNext::parse).collect()
+        input.split('\n').flat_map(SittingNext::parse).collect()
     }
 }
 
-fn get_peoples(paths: &Vec<SittingNext>) -> Vec<&str> {
+fn get_peoples(paths: &[SittingNext]) -> Vec<&str> {
     paths
         .iter()
         .map(|it| it.who.as_str())
@@ -40,7 +40,7 @@ fn get_peoples(paths: &Vec<SittingNext>) -> Vec<&str> {
         .collect::<Vec<_>>()
 }
 
-fn compute(paths: &Vec<SittingNext>) -> i32 {
+fn compute(paths: &[SittingNext]) -> i32 {
     let peoples = get_peoples(paths);
     let paths = paths
         .iter()

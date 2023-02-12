@@ -36,11 +36,11 @@ impl Ingredient {
     }
 
     fn parse_lines(content: &str) -> Vec<Ingredient> {
-        content.split("\n").flat_map(Ingredient::parse).collect()
+        content.split('\n').flat_map(Ingredient::parse).collect()
     }
 }
 
-fn quantities_of_ingredients(quantities: &Vec<i64>, ingredients: &Vec<Ingredient>) -> Vec<i64> {
+fn quantities_of_ingredients(quantities: &[i64], ingredients: &[Ingredient]) -> Vec<i64> {
     let mut scores = vec![0_i64; 5];
 
     ingredients
@@ -73,17 +73,17 @@ fn create_quantities(n: usize, i: i64) -> Vec<i64> {
     let mut x = i;
     while x > 0 {
         quantities[index] = x % 101;
-        x = x / 101;
+        x /= 101;
         index += 1;
     }
     quantities
 }
 
-fn compute_total_score(scores: &Vec<i64>) -> i64 {
+fn compute_total_score(scores: &[i64]) -> i64 {
     scores.iter().rev().skip(1).product()
 }
 
-fn quantities_constraint(quantities: &Vec<i64>) -> bool {
+fn quantities_constraint(quantities: &[i64]) -> bool {
     quantities.iter().sum::<i64>() == 100
 }
 
@@ -95,14 +95,14 @@ fn part1(input: &str) -> i64 {
     (0..top)
         .step_by(100)
         .map(|i| create_quantities(n, i))
-        .filter(|quantities| quantities_constraint(&quantities))
+        .filter(|quantities| quantities_constraint(quantities))
         .map(|quantities| quantities_of_ingredients(&quantities, &ingredients))
         .map(|scores| compute_total_score(&scores))
         .max()
         .unwrap()
 }
 
-fn calories_constrait(scores: &Vec<i64>) -> bool {
+fn calories_constrait(scores: &[i64]) -> bool {
     scores.last().unwrap() == &500_i64
 }
 
@@ -114,9 +114,9 @@ fn part2(input: &str) -> i64 {
     (0..top)
         .step_by(100)
         .map(|i| create_quantities(n, i))
-        .filter(|quantities| quantities_constraint(&quantities))
+        .filter(|quantities| quantities_constraint(quantities))
         .map(|quantities| quantities_of_ingredients(&quantities, &ingredients))
-        .filter(|scores| calories_constrait(&scores))
+        .filter(|scores| calories_constrait(scores))
         .map(|scores| compute_total_score(&scores))
         .max()
         .unwrap()

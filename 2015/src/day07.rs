@@ -93,7 +93,7 @@ impl Kind2 {
 
 impl<'a> Op<'a> {
     fn parse(expr: &'a str) -> Option<Op<'a>> {
-        let mut parts = expr.split(" ");
+        let mut parts = expr.split(' ');
         match (parts.next(), parts.next(), parts.next()) {
             (Some(lhs), Some(op), Some(rhs)) => Some(Op::Binary(Op2 {
                 kind: Kind2::parse(op)?,
@@ -156,7 +156,7 @@ impl<'a> Machine<'a> {
     fn get_atom(&self, atom: &Atom) -> Option<u16> {
         match atom {
             Atom::Value(value) => Some(*value),
-            Atom::Key(key) => self.values.get(key).map(|it| *it),
+            Atom::Key(key) => self.values.get(key).copied(),
         }
     }
 
@@ -199,18 +199,18 @@ impl<'a> Machine<'a> {
             }
         }
 
-        self.values.get(key).map(|it| *it)
+        self.values.get(key).copied()
     }
 }
 
-fn part1(content: &String) -> u16 {
-    let mut machine = Machine::parse(content.as_str());
+fn part1(content: &str) -> u16 {
+    let mut machine = Machine::parse(content);
     machine.compute("a").unwrap_or(0)
 }
 
-fn part2(content: &String) -> u16 {
+fn part2(content: &str) -> u16 {
     let part1_result = part1(content);
-    let mut machine = Machine::parse(content.as_str());
+    let mut machine = Machine::parse(content);
     {
         let machine = &mut machine;
         machine.insert(Gate {

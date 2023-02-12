@@ -31,7 +31,7 @@ fn part2(content: &str) -> i32 {
     let re = tokenizer_special_chars();
     content
         .lines()
-        .map(|it| count_regex(&re, &it))
+        .map(|it| count_regex(&re, it))
         .map(|it| it + scapes_adjust)
         .sum::<usize>() as i32
 }

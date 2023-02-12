@@ -35,7 +35,7 @@ fn contains_two_pairs(input: &str) -> bool {
         .map(|it| it.0)
         .collect();
 
-    chars_paired_unique.iter().count() >= 2
+    chars_paired_unique.len() >= 2
 }
 
 fn contains_increasing_three_letters(input: &str) -> bool {
@@ -120,7 +120,7 @@ fn part1(input: &str) -> String {
 }
 
 fn part2(input: &str) -> String {
-    part1(&part1(&input))
+    part1(&part1(input))
 }
 
 pub fn solve() -> std::io::Result<()> {

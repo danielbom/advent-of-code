@@ -9,7 +9,7 @@ struct Dim {
 impl Dim {
     fn parse(text: &str) -> Self {
         let parts = text
-            .split("x")
+            .split('x')
             .map(|it| it.parse().unwrap())
             .collect::<Vec<_>>();
         Self {
