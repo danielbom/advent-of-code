@@ -32,7 +32,7 @@ struct HasForbidSeq {
 
 impl HasForbidSeq {
     fn new() -> Self {
-        let sequences = vec!["ab", "cd", "pq", "xy"];
+        let sequences = ["ab", "cd", "pq", "xy"];
         let sequences = sequences.iter().map(|it| it.to_string()).collect();
         Self {
             last: None,

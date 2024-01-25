@@ -94,8 +94,8 @@ fn part2(input: &str) -> i32 {
             .collect();
 
         let mut result: Vec<SittingNext> = Vec::new();
-        result.extend(paths.into_iter());
-        result.extend(my_paths.into_iter());
+        result.extend(paths);
+        result.extend(my_paths);
         result
     };
 
