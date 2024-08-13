@@ -14,9 +14,10 @@ mod day13;
 mod day14;
 mod day15;
 mod day16;
+mod day17;
 
 fn main() -> std::io::Result<()> {
-    let day = std::env::args().nth(1).expect("Expect the [day] argument");
+    let day = std::env::args().nth(1).expect("Expect the <day> argument: day [1..17]");
     let day = day
         .parse::<u32>()
         .expect("Expect the [day] must be a positive integer");
@@ -37,6 +38,7 @@ fn main() -> std::io::Result<()> {
         14 => day14::solve(),
         15 => day15::solve(),
         16 => day16::solve(),
+        17 => day17::solve(),
         _ => panic!("Invalid [day] passed: {}", day),
     }
 }
