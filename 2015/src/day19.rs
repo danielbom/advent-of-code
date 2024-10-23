@@ -44,7 +44,7 @@ fn parse_input(content: &str) -> (Vec<Replacement>, String) {
     let mut replacements = vec![];
 
     let mut lines = content.lines();
-    while let Some(line) = lines.next() {
+    for line in lines.by_ref() {
         if line.is_empty() {
             break;
         }

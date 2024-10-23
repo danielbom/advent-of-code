@@ -3,7 +3,7 @@ fn parse_input(content: &str) -> Vec<i32> {
     content.lines().map(|line| line.parse().unwrap()).collect()
 }
 
-fn count_containers(containers: &Vec<i32>, expected: i32) -> i32 {
+fn count_containers(containers: &[i32], expected: i32) -> i32 {
     let mut count: i32 = 0;
     let mut stack = vec![(0, 0)];
 
