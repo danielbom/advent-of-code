@@ -1,3 +1,5 @@
+use crate::utils;
+
 use std::collections::HashSet;
 
 trait Rule {
@@ -273,11 +275,11 @@ fn part2(content: &str) -> u32 {
 
 pub fn solve() -> std::io::Result<()> {
     let mut content = String::new();
-    aoc2015::read_file("inputs/day-05.txt", &mut content)?;
+    utils::read_file("inputs/day-05.txt", &mut content)?;
 
     println!("Day 05");
-    aoc2015::time_it!("Part 1", part1(&content));
-    aoc2015::time_it!("Part 2", part2(&content));
+    time_it!("Part 1", part1(&content));
+    time_it!("Part 2", part2(&content));
 
     Ok(())
 }

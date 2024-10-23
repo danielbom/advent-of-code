@@ -1,3 +1,4 @@
+use crate::utils;
 use itertools::Itertools;
 use std::collections::{HashMap, HashSet};
 
@@ -104,11 +105,11 @@ fn part2(input: &str) -> i32 {
 
 pub fn solve() -> std::io::Result<()> {
     let mut content = String::new();
-    aoc2015::read_file("inputs/day-13.txt", &mut content)?;
+    utils::read_file("inputs/day-13.txt", &mut content)?;
 
     println!("Day 13");
-    aoc2015::time_it!("Part 1", part1(&content));
-    aoc2015::time_it!("Part 2", part2(&content));
+    time_it!("Part 1", part1(&content));
+    time_it!("Part 2", part2(&content));
 
     Ok(())
 }

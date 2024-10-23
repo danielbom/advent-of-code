@@ -1,3 +1,5 @@
+use crate::utils;
+
 use std::sync::{Arc, Mutex};
 use std::thread;
 
@@ -23,7 +25,7 @@ impl SantaMove {
 
 fn read_file_async(mutex: Arc<Mutex<String>>) -> std::io::Result<()> {
     let mut content = mutex.lock().unwrap();
-    aoc2015::read_file("inputs/day-03.txt", &mut content)?;
+    utils::read_file("inputs/day-03.txt", &mut content)?;
     Ok(())
 }
 
@@ -38,7 +40,7 @@ fn part1(mutex: Arc<Mutex<String>>) -> std::io::Result<()> {
         set.insert(santa);
     }
 
-    aoc2015::time_it!("Part 1", set.len());
+    time_it!("Part 1", set.len());
     Ok(())
 }
 
@@ -59,7 +61,7 @@ fn part2(mutex: Arc<Mutex<String>>) -> std::io::Result<()> {
         }
     }
 
-    aoc2015::time_it!("Part 2", set.len());
+    time_it!("Part 2", set.len());
     Ok(())
 }
 

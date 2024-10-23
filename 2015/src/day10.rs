@@ -1,3 +1,4 @@
+use crate::utils;
 struct CountGroupChars<'a> {
     chars: &'a str,
     index: usize,
@@ -50,11 +51,11 @@ fn part2(content: &str) -> usize {
 
 pub fn solve() -> std::io::Result<()> {
     let mut content = String::new();
-    aoc2015::read_file("inputs/day-10.txt", &mut content)?;
+    utils::read_file("inputs/day-10.txt", &mut content)?;
 
     println!("Day 10");
-    aoc2015::time_it!("Part 1", part1(&content));
-    aoc2015::time_it!("Part 2", part2(&content));
+    time_it!("Part 1", part1(&content));
+    time_it!("Part 2", part2(&content));
 
     Ok(())
 }

@@ -1,3 +1,4 @@
+use crate::utils;
 
 use std::sync::{mpsc, Arc, Mutex};
 use std::thread;
@@ -78,12 +79,12 @@ fn part2(content: &str) -> i32 {
 
 pub fn solve() -> std::io::Result<()> {
     let mut content = String::new();
-    aoc2015::read_file("inputs/day-04.txt", &mut content)?;
+    utils::read_file("inputs/day-04.txt", &mut content)?;
     let content = content.trim_end();
 
     println!("Day 04");
-    aoc2015::time_it!("Part 1", part1(content));
-    aoc2015::time_it!("Part 2", part2(content));
+    time_it!("Part 1", part1(content));
+    time_it!("Part 2", part2(content));
 
     Ok(())
 }

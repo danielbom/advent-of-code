@@ -1,3 +1,4 @@
+use crate::utils;
 use regex::Regex;
 
 fn tokenizer_codes() -> Regex {
@@ -38,11 +39,11 @@ fn part2(content: &str) -> i32 {
 
 pub fn solve() -> std::io::Result<()> {
     let mut content = String::new();
-    aoc2015::read_file("inputs/day-08.txt", &mut content)?;
+    utils::read_file("inputs/day-08.txt", &mut content)?;
 
     println!("Day 08");
-    aoc2015::time_it!("Part 1", part1(&content));
-    aoc2015::time_it!("Part 2", part2(&content));
+    time_it!("Part 1", part1(&content));
+    time_it!("Part 2", part2(&content));
 
     Ok(())
 }

@@ -1,3 +1,4 @@
+use crate::utils;
 #[derive(Default, PartialEq, Debug)]
 struct AuntSue {
     id: u32,
@@ -106,12 +107,12 @@ fn part2(aunts: &[AuntSue]) -> u32 {
 
 pub fn solve() -> std::io::Result<()> {
     let mut content = String::new();
-    aoc2015::read_file("inputs/day-16.txt", &mut content)?;
+    utils::read_file("inputs/day-16.txt", &mut content)?;
     let content = AuntSue::parse_lines(&content);
 
     println!("Day 16");
-    aoc2015::time_it!("Part 1", part1(&content));
-    aoc2015::time_it!("Part 2", part2(&content));
+    time_it!("Part 1", part1(&content));
+    time_it!("Part 2", part2(&content));
 
     Ok(())
 }

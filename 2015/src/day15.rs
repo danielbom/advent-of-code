@@ -1,3 +1,4 @@
+use crate::utils;
 #[derive(Debug, Clone)]
 struct Ingredient {
     #[allow(dead_code)]
@@ -124,11 +125,11 @@ fn part2(input: &str) -> i64 {
 
 pub fn solve() -> std::io::Result<()> {
     let mut content = String::new();
-    aoc2015::read_file("inputs/day-15.txt", &mut content)?;
+    utils::read_file("inputs/day-15.txt", &mut content)?;
 
     println!("Day 15");
-    aoc2015::time_it!("Part 1", part1(&content));
-    aoc2015::time_it!("Part 2", part2(&content));
+    time_it!("Part 1", part1(&content));
+    time_it!("Part 2", part2(&content));
 
     Ok(())
 }

@@ -16,8 +16,3 @@ petgraph = "0.6.3"
 [[bin]]
 name = "aoc2015"
 path = "src/main.rs"
-
-[lib]
-name = "aoc2015"
-path = "src/lib.rs"
-

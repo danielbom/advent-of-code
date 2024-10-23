@@ -1,3 +1,4 @@
+use crate::utils;
 use serde_json::Value;
 
 fn json_sum_numbers(value: &Value) -> i64 {
@@ -47,11 +48,11 @@ fn part2(input: &str) -> i64 {
 
 pub fn solve() -> std::io::Result<()> {
     let mut content = String::new();
-    aoc2015::read_file("inputs/day-12.txt", &mut content)?;
+    utils::read_file("inputs/day-12.txt", &mut content)?;
 
     println!("Day 12");
-    aoc2015::time_it!("Part 1", part1(&content));
-    aoc2015::time_it!("Part 2", part2(&content));
+    time_it!("Part 1", part1(&content));
+    time_it!("Part 2", part2(&content));
 
     Ok(())
 }
