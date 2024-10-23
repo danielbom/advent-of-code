@@ -8,3 +8,11 @@ pub fn read_file(filename: &str, content: &mut String) -> std::io::Result<()> {
     buf_reader.read_to_string(content)?;
     Ok(())
 }
+
+#[macro_export]
+macro_rules! time_it {
+    ($name:expr, $expr:expr) => {
+        let now = std::time::Instant::now();
+        println!("{}: {} [{} ms]", $name, $expr, now.elapsed().as_millis());
+    };
+}

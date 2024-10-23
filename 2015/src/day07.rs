@@ -211,20 +211,14 @@ fn part1(content: &str) -> u16 {
 fn part2(content: &str) -> u16 {
     let part1_result = part1(content);
     let mut machine = Machine::parse(content);
-    {
-        let machine = &mut machine;
-        machine.insert(Gate {
-            output: "b",
-            op: Op::Unary(Op1 {
-                kind: Kind1::Assign,
-                value: Atom::Value(part1_result),
-            }),
-        });
-    }
-    {
-        let machine = &mut machine;
-        machine.compute("a").unwrap_or(0)
-    }
+    machine.insert(Gate {
+        output: "b",
+        op: Op::Unary(Op1 {
+            kind: Kind1::Assign,
+            value: Atom::Value(part1_result),
+        }),
+    });
+    machine.compute("a").unwrap_or(0)
 }
 
 pub fn solve() -> std::io::Result<()> {
@@ -232,8 +226,8 @@ pub fn solve() -> std::io::Result<()> {
     aoc2015::read_file("inputs/day-07.txt", &mut content)?;
 
     println!("Day 07");
-    println!("Part 1: {}", part1(&content));
-    println!("Part 2: {}", part2(&content));
+    aoc2015::time_it!("Part 1", part1(&content));
+    aoc2015::time_it!("Part 2", part2(&content));
 
     Ok(())
 }

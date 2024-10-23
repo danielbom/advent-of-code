@@ -110,8 +110,8 @@ pub fn solve() -> std::io::Result<()> {
     let content = AuntSue::parse_lines(&content);
 
     println!("Day 16");
-    println!("Part 1: {}", part1(&content));
-    println!("Part 2: {}", part2(&content));
+    aoc2015::time_it!("Part 1", part1(&content));
+    aoc2015::time_it!("Part 2", part2(&content));
 
     Ok(())
 }

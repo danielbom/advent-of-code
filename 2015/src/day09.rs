@@ -134,7 +134,7 @@ fn part2(content: &str) -> i32 {
     let graph = build_graph(&roads);
     let cities_count = cities.len() as u16;
     let mut max_distance = 0;
-    let find_min_distance = &mut |it: &DfsNode| {
+    let find_max_distance = &mut |it: &DfsNode| {
         if it.depth == cities_count - 1 && it.distance > max_distance {
             max_distance = it.distance;
         }
@@ -145,7 +145,7 @@ fn part2(content: &str) -> i32 {
             &graph,
             &DfsNode::new(city),
             &HashSet::new(),
-            find_min_distance,
+            find_max_distance,
         )
     });
 
@@ -157,8 +157,8 @@ pub fn solve() -> std::io::Result<()> {
     aoc2015::read_file("inputs/day-09.txt", &mut content)?;
 
     println!("Day 09");
-    println!("Part 1: {}", part1(&content));
-    println!("Part 2: {}", part2(&content));
+    aoc2015::time_it!("Part 1", part1(&content));
+    aoc2015::time_it!("Part 2", part2(&content));
 
     Ok(())
 }

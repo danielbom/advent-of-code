@@ -38,7 +38,7 @@ fn part1(mutex: Arc<Mutex<String>>) -> std::io::Result<()> {
         set.insert(santa);
     }
 
-    println!("Part 1: {}", set.len());
+    aoc2015::time_it!("Part 1", set.len());
     Ok(())
 }
 
@@ -59,7 +59,7 @@ fn part2(mutex: Arc<Mutex<String>>) -> std::io::Result<()> {
         }
     }
 
-    println!("Part 2: {}", set.len());
+    aoc2015::time_it!("Part 2", set.len());
     Ok(())
 }
 

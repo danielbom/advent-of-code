@@ -102,7 +102,7 @@ fn part1(input: &str) -> i64 {
         .unwrap()
 }
 
-fn calories_constrait(scores: &[i64]) -> bool {
+fn calories_constraint(scores: &[i64]) -> bool {
     scores.last().unwrap() == &500_i64
 }
 
@@ -116,7 +116,7 @@ fn part2(input: &str) -> i64 {
         .map(|i| create_quantities(n, i))
         .filter(|quantities| quantities_constraint(quantities))
         .map(|quantities| quantities_of_ingredients(&quantities, &ingredients))
-        .filter(|scores| calories_constrait(scores))
+        .filter(|scores| calories_constraint(scores))
         .map(|scores| compute_total_score(&scores))
         .max()
         .unwrap()
@@ -127,8 +127,8 @@ pub fn solve() -> std::io::Result<()> {
     aoc2015::read_file("inputs/day-15.txt", &mut content)?;
 
     println!("Day 15");
-    println!("Part 1: {}", part1(&content));
-    println!("Part 2: {}", part2(&content));
+    aoc2015::time_it!("Part 1", part1(&content));
+    aoc2015::time_it!("Part 2", part2(&content));
 
     Ok(())
 }

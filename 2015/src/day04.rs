@@ -1,6 +1,6 @@
 
 use std::sync::{mpsc, Arc, Mutex};
-use std::{thread, time};
+use std::thread;
 
 const THREADS_COUNT: i32 = 8;
 const TRIES: i32 = 1000;
@@ -68,16 +68,12 @@ fn compute1(content: &str, start: &str) -> u32 {
     count
 }
 
-fn part1(content: &str) {
-    let now = time::Instant::now();
-    let result = compute(content, "00000");
-    println!("Part 1: {} [{} s]", result, now.elapsed().as_secs());
+fn part1(content: &str) -> i32 {
+    compute(content, "00000")
 }
 
-fn part2(content: &str) {
-    let now = time::Instant::now();
-    let result = compute(content, "000000");
-    println!("Part 2: {} [{} s]", result, now.elapsed().as_secs());
+fn part2(content: &str) -> i32 {
+    compute(content, "000000")
 }
 
 pub fn solve() -> std::io::Result<()> {
@@ -86,8 +82,8 @@ pub fn solve() -> std::io::Result<()> {
     let content = content.trim_end();
 
     println!("Day 04");
-    part1(content);
-    part2(content);
+    aoc2015::time_it!("Part 1", part1(content));
+    aoc2015::time_it!("Part 2", part2(content));
 
     Ok(())
 }

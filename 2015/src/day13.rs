@@ -107,8 +107,8 @@ pub fn solve() -> std::io::Result<()> {
     aoc2015::read_file("inputs/day-13.txt", &mut content)?;
 
     println!("Day 13");
-    println!("Part 1: {}", part1(&content));
-    println!("Part 2: {}", part2(&content));
+    aoc2015::time_it!("Part 1", part1(&content));
+    aoc2015::time_it!("Part 2", part2(&content));
 
     Ok(())
 }
