@@ -22,6 +22,7 @@ mod day18;
 mod day19;
 mod day20;
 mod day21;
+mod day22;
 
 fn main() -> std::io::Result<()> {
     let day = std::env::args().nth(1).expect("Expect the <day> argument: day [1..17]");
@@ -29,27 +30,28 @@ fn main() -> std::io::Result<()> {
         .parse::<u32>()
         .expect("Expect the [day] must be a positive integer");
     match day {
-        1 => day01::solve(),
-        2 => day02::solve(),
-        3 => day03::solve(),
-        4 => day04::solve(),
-        5 => day05::solve(),
-        6 => day06::solve(),
-        7 => day07::solve(),
-        8 => day08::solve(),
-        9 => day09::solve(),
-        10 => day10::solve(),
-        11 => day11::solve(),
-        12 => day12::solve(),
-        13 => day13::solve(),
-        14 => day14::solve(),
-        15 => day15::solve(),
-        16 => day16::solve(),
-        17 => day17::solve(),
-        18 => day18::solve(),
-        19 => day19::solve(),
-        20 => day20::solve(),
-        21 => day21::solve(),
+       1 => day01::solve(),
+       2 => day02::solve(),
+       3 => day03::solve(),
+       4 => day04::solve(),
+       5 => day05::solve(),
+       6 => day06::solve(),
+       7 => day07::solve(),
+       8 => day08::solve(),
+       9 => day09::solve(),
+       10 => day10::solve(),
+       11 => day11::solve(),
+       12 => day12::solve(),
+       13 => day13::solve(),
+       14 => day14::solve(),
+       15 => day15::solve(),
+       16 => day16::solve(),
+       17 => day17::solve(),
+       18 => day18::solve(),
+       19 => day19::solve(),
+       20 => day20::solve(),
+       21 => day21::solve(),
+        22 => day22::solve(),
         _ => panic!("Invalid [day] passed: {}", day),
     }
 }
