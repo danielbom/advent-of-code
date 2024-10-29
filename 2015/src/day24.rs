@@ -180,7 +180,7 @@ fn parse_values(content: &str) -> Vec<usize> {
         .collect::<Vec<usize>>()
 }
 
-const GREEDY: bool = false;
+const GREEDY: bool = true;
 
 fn part1(content: &str) -> u64 {
     let values = parse_values(content);

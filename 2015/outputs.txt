@@ -1,0 +1,74 @@
+Day 01
+Part 1: 232 [0 ms]
+Part 2: 1783 [0 ms]
+Day 02
+Part 1: 1588178 [0 ms]
+Part 2: 3783758 [0 ms]
+Day 03
+Part 2: 1 [0 ms]
+Part 1: 1 [0 ms]
+Day 04
+Part 1: 282749 [143 ms]
+Part 2: 9962624 [5176 ms]
+Day 05
+Part 1: 238 [7 ms]
+Part 2: 69 [7 ms]
+Day 06
+Part 1: 377891 [540 ms]
+Part 2: 14110788 [573 ms]
+Day 07
+Part 1: 46065 [1 ms]
+Part 2: 14134 [1 ms]
+Day 08
+Part 1: 1350 [5 ms]
+Part 2: 2085 [0 ms]
+Day 09
+Part 1: 207 [321 ms]
+Part 2: 804 [346 ms]
+Day 10
+Part 1: 360154 [96 ms]
+Part 2: 5103798 [1435 ms]
+Day 11
+Part 1: hepxxyzz [672 ms]
+Part 2: heqaabcc [2591 ms]
+Day 12
+Part 1: 191164 [3 ms]
+Part 2: 87842 [3 ms]
+Day 13
+Part 1: 664 [186 ms]
+Part 2: 640 [1728 ms]
+Day 14
+Part 1: 2696 [0 ms]
+Part 2: 1084 [0 ms]
+Day 15
+Part 1: 13882464 [490 ms]
+Part 2: 11171160 [402 ms]
+Day 16
+Part 1: 103 [0 ms]
+Part 2: 405 [0 ms]
+Day 17
+Part 1: 654 [1 ms]
+Part 2: 57 [5 ms]
+Day 18
+Part 1: 821 [279 ms]
+Part 2: 886 [271 ms]
+Day 19
+Part 1: 535 [3 ms]
+Part 2: 212 [0 ms]
+Day 20
+Part 1: 665280 [187 ms]
+Part 2: 705600 [212 ms]
+Day 21
+Part 1: 121 [0 ms]
+Part 2: 201 [0 ms]
+Day 22
+Part 1: 900 [21 ms]
+Part 2: 1216 [81 ms]
+Day 23
+Part 1: 170 [0 ms]
+Part 2: 247 [0 ms]
+Day 24
+Part 1: 11266889531 [37 ms]
+Part 2: 77387711 [16 ms]
+Day 25
+Part 1: 9132360 [442 ms]
