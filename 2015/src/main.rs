@@ -24,6 +24,7 @@ mod day20;
 mod day21;
 mod day22;
 mod day23;
+mod day24;
 
 fn main() -> std::io::Result<()> {
     let day = std::env::args()
@@ -56,6 +57,7 @@ fn main() -> std::io::Result<()> {
         21 => day21::solve(),
         22 => day22::solve(),
         23 => day23::solve(),
+        24 => day24::solve(),
         _ => panic!("Invalid [day] passed: {}", day),
     }
 }
