@@ -133,11 +133,11 @@ func part1(iss [][]Instruction) string {
 
 func part2(iss [][]Instruction) string {
 	keypad := []string{
-		"  1",
-		" 234",
+		"  1  ",
+		" 234 ",
 		"56789",
-		" ABC",
-		"  D",
+		" ABC ",
+		"  D  ",
 	}
 	return computeCode(keypad, 2, 0, iss)
 }

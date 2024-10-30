@@ -7,6 +7,7 @@ import (
 
 	"aoc2016/internal/day01"
 	"aoc2016/internal/day02"
+	"aoc2016/internal/day03"
 )
 
 func main() {
@@ -25,5 +26,7 @@ func main() {
 		day01.Solve()
 	case 2:
 		day02.Solve()
+	case 3:
+		day03.Solve()
 	}
 }
