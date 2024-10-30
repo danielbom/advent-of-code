@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"aoc2016/internal/day01"
+	"aoc2016/internal/day02"
 )
 
 func main() {
@@ -22,5 +23,7 @@ func main() {
 	switch day {
 	case 1:
 		day01.Solve()
+	case 2:
+		day02.Solve()
 	}
 }
