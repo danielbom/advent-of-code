@@ -27,3 +27,9 @@ for i in $(seq 1 25); do go run cmd/main.go $i; done;
 ```bash
 go test internal/day01/ -v --run TestPart1
 ```
+
+## Format
+
+```bash
+gofmt -w .
+```
