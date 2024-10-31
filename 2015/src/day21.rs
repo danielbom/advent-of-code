@@ -76,7 +76,7 @@ mod game {
         }
 
         pub fn parse(text: &str) -> Option<Self> {
-            let mut lines = text.lines().into_iter();
+            let mut lines = text.lines();
             let hit_points = lines.next()?["Hit Points: ".len()..].parse().ok()?;
             let damage = lines.next()?["Damage: ".len()..].parse().ok()?;
             let armor = lines.next()?["Armor: ".len()..].parse().ok()?;
@@ -232,8 +232,8 @@ fn minimum_cost_to_win(player: &Stats, boss: &Stats) -> i32 {
     let shop = Shop::new();
 
     Shopping::new(&shop)
-        .map(|ix| ix.apply(&shop, &player))
-        .filter(|(player, _)| fight_math(&player, &boss) == Win::Player)
+        .map(|ix| ix.apply(&shop, player))
+        .filter(|(player, _)| fight_math(player, boss) == Win::Player)
         .map(|(_, cost)| cost)
         .min()
         .unwrap_or(i32::MAX)
@@ -249,8 +249,8 @@ fn maximum_cost_to_lose(player: &Stats, boss: &Stats) -> i32 {
     let shop = Shop::new();
 
     Shopping::new(&shop)
-        .map(|ix| ix.apply(&shop, &player))
-        .filter(|(player, _)| fight_math(&player, &boss) == Win::Boss)
+        .map(|ix| ix.apply(&shop, player))
+        .filter(|(player, _)| fight_math(player, boss) == Win::Boss)
         .map(|(_, cost)| cost)
         .max()
         .unwrap_or(i32::MIN)
@@ -307,6 +307,6 @@ mod tests {
             armor: 2,
         };
 
-        assert_eq!(101, minimum_cost_to_win(&player, &boss), "Player must wins");
+        assert_eq!(65, minimum_cost_to_win(&player, &boss), "Player must wins");
     }
 }

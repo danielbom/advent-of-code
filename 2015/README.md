@@ -5,28 +5,27 @@
 
 # Build, Run, Test
 
-## Only one
+## Run
 
 ```bash
-cargo run -- <day>
-```
-
-## All (Powershell)
-
-```powershell
-cargo build
-1..25 | % { ./target/debug/aoc2015.exe $_; }
-```
-
-## All (Bash)
-
-```bash
-cargo build
-for i in $(seq 1 25); do ./target/debug/aoc2015.exe $i; done;
+cargo run -- <day>  // Single day
+cargo run -- 0      // All days
 ```
 
 ## Test
 
 ```bash
 cargo test --package aoc2015 --bin aoc2015 -- day19::tests --show-output --nocapture
+```
+
+## Format
+
+```bash
+cargo fmt
+```
+
+## Lint
+
+```bash
+cargo clippy
 ```

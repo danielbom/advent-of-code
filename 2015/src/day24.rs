@@ -13,10 +13,7 @@ mod priority_queue {
 
     impl Package {
         fn new(bag: usize, weight: usize) -> Self {
-            Self {
-                bag,
-                weight,
-            }
+            Self { bag, weight }
         }
 
         fn contains(&self, bit: usize) -> bool {
@@ -86,7 +83,7 @@ mod priority_queue {
 
             for p2 in packages.iter() {
                 if !p1.contains(p2.bag) {
-                    let p3 = p1.union(&p2);
+                    let p3 = p1.union(p2);
                     if p3.weight <= part_weight && p3.len() <= best_len {
                         queue.push(p3);
                     }
@@ -159,8 +156,8 @@ mod greedy {
                 best_count = p1.len();
                 best_quantum = u64::min(best_quantum, quantum);
             } else {
-                for i in (start + 1)..values.len() {
-                    let p2 = Package::new(1 << i, values[i]).union(&p1);
+                for (i, x) in values.iter().enumerate().skip(start + 1) {
+                    let p2 = Package::new(1 << i, *x).union(&p1);
                     if p2.weight <= part_weight && p2.len() <= best_count {
                         queue.push((p2, i));
                     }
@@ -175,8 +172,7 @@ mod greedy {
 fn parse_values(content: &str) -> Vec<usize> {
     content
         .lines()
-        .map(|line| line.parse().ok())
-        .flatten()
+        .filter_map(|line| line.parse().ok())
         .collect::<Vec<usize>>()
 }
 

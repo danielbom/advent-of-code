@@ -48,12 +48,12 @@ impl GameOfLife {
 
     fn turn_on_corners(&mut self) {
         self.skip_corner = true;
-    
+
         self.map[0][0] = true;
         self.map[0][self.cols - 1] = true;
         self.map[self.rows - 1][0] = true;
         self.map[self.rows - 1][self.cols - 1] = true;
-        
+
         self.update[0][0] = true;
         self.update[0][self.cols - 1] = true;
         self.update[self.rows - 1][0] = true;

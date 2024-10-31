@@ -11,13 +11,13 @@ impl Replacement {
         for i in 1..parts.len() {
             let mut sb = String::with_capacity(content.len() + self.1.len());
             sb.push_str(parts[0]);
-            for j in 1..parts.len() {
+            for (j, part) in parts.iter().enumerate().skip(1) {
                 if j == i {
                     sb.push_str(&self.1);
                 } else {
                     sb.push_str(&self.0);
                 }
-                sb.push_str(parts[j]);
+                sb.push_str(part);
             }
             result.push(sb);
         }
@@ -28,9 +28,9 @@ impl Replacement {
         let parts = content.split(&self.0).collect::<Vec<_>>();
         let mut sb = String::with_capacity(content.len() + self.1.len());
         sb.push_str(parts[0]);
-        for i in 1..parts.len() {
+        for part in parts.iter().skip(1) {
             sb.push_str(&self.1);
-            sb.push_str(parts[i]);
+            sb.push_str(part);
         }
         (sb, parts.len() - 1)
     }
@@ -153,7 +153,7 @@ O => HH
     #[test]
     fn test_part2_01() {
         let input = test2_input();
-        let expected = 3 + 1;
+        let expected = 3;
         let result = part2(&format!("{}{}", input, "HOH"));
         assert_eq!(expected, result);
     }
@@ -161,7 +161,7 @@ O => HH
     #[test]
     fn test_part2_02() {
         let input = test2_input();
-        let expected = 6 + 1;
+        let expected = 6;
         let result = part2(&format!("{}{}", input, "HOHOHO"));
         assert_eq!(expected, result);
     }

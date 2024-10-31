@@ -31,7 +31,7 @@ impl Iterator for SheetIterator {
             self.row = self.col;
             self.col = 1;
         }
-        
+
         Some(next)
     }
 }

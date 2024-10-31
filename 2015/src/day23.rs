@@ -65,10 +65,7 @@ impl I {
 }
 
 fn parse_instructions(content: &str) -> Vec<I> {
-    content
-        .lines()
-        .filter_map(I::parse)
-        .collect()
+    content.lines().filter_map(I::parse).collect()
 }
 
 struct Program {

@@ -79,7 +79,7 @@ mod tests {
     use super::*;
 
     fn sample_input() -> Vec<i32> {
-        let content =  "20
+        let content = "20
 15
 10
 5

@@ -35,7 +35,7 @@ mod factors {
                 return Some(1);
             }
 
-            return None;
+            None
         }
     }
 
@@ -90,7 +90,7 @@ mod factors {
                 return Some(i);
             }
 
-            return None;
+            None
         }
     }
 
@@ -108,7 +108,7 @@ mod part1 {
     pub const PRESENTS_PER_HOUSE: usize = 10;
 
     pub fn compute_presents(house: usize) -> usize {
-        Factors::new(house).into_iter().sum::<usize>() * PRESENTS_PER_HOUSE
+        Factors::new(house).sum::<usize>() * PRESENTS_PER_HOUSE
     }
 
     pub fn closest_house(presents: usize) -> usize {
@@ -145,7 +145,6 @@ mod part2 {
 
     pub fn compute_presents(house: usize) -> usize {
         Factors::new(house)
-            .into_iter()
             .filter(|&x| x >= house / HOUSES_LIMIT)
             .sum::<usize>()
             * PRESENTS_PER_HOUSE
@@ -260,7 +259,7 @@ mod tests {
         let fs1 = part1_compute_factors(500);
         let fs2 = part2_compute_factors(500);
         assert_eq!(fs1, vec![1, 2, 4, 5, 10, 20, 25, 50, 100, 125, 250, 500]);
-        assert_eq!(fs2, vec![            10, 20, 25, 50, 100, 125, 250, 500]);
+        assert_eq!(fs2, vec![10, 20, 25, 50, 100, 125, 250, 500]);
     }
 
     #[test]
