@@ -4,22 +4,11 @@
 
 # Build, Run, Test
 
-## Only one
+## Run
 
 ```bash
-go run cmd/main.go <day>
-```
-
-## All (Powershell)
-
-```powershell
-1..25 | % { go run cmd/main.go $_; }
-```
-
-## All (Bash)
-
-```bash
-for i in $(seq 1 25); do go run cmd/main.go $i; done;
+go run cmd/main.go <day> // Single day
+go run cmd/main.go 0 // All days
 ```
 
 ## Test
