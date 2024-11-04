@@ -5,6 +5,8 @@ import (
 	"time"
 )
 
+var showTime bool = true
+
 func Abs(x int) int {
 	if x >= 0 {
 		return x
@@ -20,8 +22,17 @@ func Min(x, y int) int {
 }
 
 func TimeIt(name, format string, f func() any) {
-	start := time.Now()
-	result := f()
-	elapsed := time.Since(start)
-	fmt.Printf("%s "+format+" [%v]\n", name, result, elapsed)
+	if showTime {
+		start := time.Now()
+		result := f()
+		elapsed := time.Since(start)
+		fmt.Printf("%s "+format+" [%v]\n", name, result, elapsed)
+	} else {
+		result := f()
+		fmt.Printf("%s "+format+"\n", name, result)
+	}
+}
+
+func DisableTime() {
+	showTime = false
 }

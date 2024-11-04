@@ -30,6 +30,7 @@ import (
 	"aoc2016/internal/day23"
 	"aoc2016/internal/day24"
 	"aoc2016/internal/day25"
+	"aoc2016/internal/utils"
 )
 
 func runDay(day int) {
@@ -88,14 +89,20 @@ func runDay(day int) {
 }
 
 func main() {
-	if len(os.Args) != 2 {
-		fmt.Println("Usage: go run cmd/main.go DAY")
+	if len(os.Args) < 2 {
+		fmt.Println("Usage: go run cmd/main.go DAY [--no-time]")
 		return
 	}
 
 	day, err := strconv.Atoi(os.Args[1])
 	if err != nil {
 		panic(err)
+	}
+
+	if len(os.Args) == 3 {
+		if os.Args[2] == "--no-time" {
+			utils.DisableTime()
+		}
 	}
 
 	if day == 0 {
