@@ -114,7 +114,7 @@ func (g *Gen2) Result() string {
 	return string(result)
 }
 
-func GeneratePasswordNaive(g Gen, prefix string) string {
+func GeneratePasswordSequencial(g Gen, prefix string) string {
 	count := 0
 	for !g.Complete() {
 		input := fmt.Sprintf("%s%d", prefix, count)
@@ -125,87 +125,49 @@ func GeneratePasswordNaive(g Gen, prefix string) string {
 	return g.Result()
 }
 
-func GeneratePasswordFancy(g Gen, prefix string) string {
+func GeneratePasswordParallel(g Gen, prefix string) string {
 	var wg sync.WaitGroup
-
 	workers := runtime.NumCPU()
-	if workers > 1 {
-		workers--
-	}
-	if workers > 1 {
-		workers--
-	}
-
-	more := make(chan bool, workers+2)
-	in := make(chan int, workers+2)
-	out := make(chan byte, 8)
-	end := make(chan string)
-
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		count := 1
-		for {
-			moreCount := <-more
-			if moreCount {
-				in <- count
-				count++
-			} else {
-				break
-			}
-		}
-		for i := 0; i < workers; i++ {
-			in <- 0
-		}
-	}()
-
-	for i := 0; i < workers; i++ {
+	gap := 128
+	start := make(chan int, workers)
+	for w := 0; w < workers; w++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			times := 64 // making the computation more expensive (worthy)
-			more <- true
-			for {
-				count := <-in
-				if count == 0 {
-					break
-				}
-				for i := 0; i < times; i++ {
-					input := fmt.Sprintf("%s%d", prefix, (count*times)+i)
+			for s := range start {
+				for i := 0; i < gap; i++ {
+					input := fmt.Sprintf("%s%d", prefix, s+i)
 					hash := MD5Hash(input)
 					g.Consume(hash)
 				}
-				more <- !g.Complete()
 			}
 		}()
 	}
-
+	for i := 0; !g.Complete(); i += gap {
+		start <- i
+	}
+	close(start)
 	wg.Wait()
-	close(end)
-	close(in)
-	close(out)
-	close(more)
-
 	return g.Result()
 }
 
-const NAIVE = false
+const PARALLEL = true
 
 func part1(prefix string) string {
 	g := NewGen1()
-	if NAIVE {
-		return GeneratePasswordNaive(&g, prefix)
+	if PARALLEL {
+		return GeneratePasswordParallel(&g, prefix)
 	} else {
-		return GeneratePasswordFancy(&g, prefix)
+		return GeneratePasswordSequencial(&g, prefix)
 	}
 }
 
 func part2(prefix string) string {
 	g := NewGen2()
-	if NAIVE {
-		return GeneratePasswordNaive(&g, prefix)
+	if PARALLEL {
+		return GeneratePasswordParallel(&g, prefix)
 	} else {
-		return GeneratePasswordFancy(&g, prefix)
+		return GeneratePasswordSequencial(&g, prefix)
 	}
 }
 

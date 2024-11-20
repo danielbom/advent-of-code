@@ -14,13 +14,13 @@ func TestGeneratePassword1(t *testing.T) {
 
 	g := NewGen1()
 	for _, test := range tests {
-		resultNaive := GeneratePasswordNaive(&g, test.input)
-		if resultNaive != test.expected {
-			t.Errorf("GeneratePasswordNaive(1, %v) = %s, want %s", test.input, resultNaive, test.expected)
+		resultSequencial := GeneratePasswordSequencial(&g, test.input)
+		if resultSequencial != test.expected {
+			t.Errorf("GeneratePasswordSequencial(1, %v) = %s, want %s", test.input, resultSequencial, test.expected)
 		}
-		resultFancy := GeneratePasswordFancy(&g, test.input)
-		if resultFancy != resultNaive {
-			t.Errorf("GeneratePasswordFancy(1, %v) = %s, want %s", test.input, resultFancy, test.expected)
+		resultParallel := GeneratePasswordParallel(&g, test.input)
+		if resultParallel != resultSequencial {
+			t.Errorf("GeneratePasswordParallel(1, %v) = %s, want %s", test.input, resultParallel, test.expected)
 		}
 	}
 }
@@ -35,13 +35,13 @@ func TestGeneratePassword2(t *testing.T) {
 
 	g := NewGen2()
 	for _, test := range tests {
-		resultNaive := GeneratePasswordNaive(&g, test.input)
-		if resultNaive != test.expected {
-			t.Errorf("GeneratePasswordNaive(2, %v) = %s, want %s", test.input, resultNaive, test.expected)
+		resultSequencial := GeneratePasswordSequencial(&g, test.input)
+		if resultSequencial != test.expected {
+			t.Errorf("GeneratePasswordSequencial(2, %v) = %s, want %s", test.input, resultSequencial, test.expected)
 		}
-		resultFancy := GeneratePasswordFancy(&g, test.input)
-		if resultFancy != resultNaive {
-			t.Errorf("GeneratePasswordFancy(2, %v) = %s, want %s", test.input, resultFancy, test.expected)
+		resultParallel := GeneratePasswordParallel(&g, test.input)
+		if resultParallel != resultSequencial {
+			t.Errorf("GeneratePasswordParallel(2, %v) = %s, want %s", test.input, resultParallel, test.expected)
 		}
 	}
 }

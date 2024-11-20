@@ -123,37 +123,28 @@ func HashMatch(h HashPattern, hs []HashPattern) bool {
 }
 
 func (f *HashFinder) ComputeParallel() {
-	type Pattern struct {
-		pattern HashPattern
-		index   int
-	}
 	var wg sync.WaitGroup
 	workers := runtime.NumCPU()
 	n := workers*1000 + 1000
+	gap := 100 // To avoid bounds checks, it must be a factor of `n`.
 	hs := make([]HashPattern, n)
-	patterns := make(chan Pattern, workers*2)
-	index := make(chan int, workers)
-	go func() {
-		for p := range patterns {
-			hs[p.index] = p.pattern
-		}
-	}()
+	start := make(chan int, workers)
 	for w := 0; w < workers; w++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			for i := range index {
-				p := NextHashPattern(f.salt, f.count+i, f.stretch)
-				patterns <- Pattern{pattern: p, index: i}
+			for s := range start {
+				for i := 0; i < gap; i++ {
+					hs[s+i] = NextHashPattern(f.salt, f.count+s+i, f.stretch)
+				}
 			}
 		}()
 	}
-	for i := 0; i < n; i++ {
-		index <- i
+	for i := 0; i < n; i += gap {
+		start <- i
 	}
-	close(index)
+	close(start)
 	wg.Wait()
-	close(patterns)
 	if len(f.hs) == 0 {
 		f.hs = hs
 	} else {
@@ -180,7 +171,7 @@ func (f *HashFinder) RunParallel() {
 	}
 }
 
-func (f *HashFinder) Run() {
+func (f *HashFinder) RunSequencial() {
 	for i := 0; i < 1000; i++ {
 		f.Next()
 	}
@@ -204,7 +195,7 @@ func part1(salt string) int {
 	if PARALLEL {
 		f.RunParallel()
 	} else {
-		f.Run()
+		f.RunSequencial()
 	}
 	return f.index
 }
@@ -214,7 +205,7 @@ func part2(salt string) int {
 	if PARALLEL {
 		f.RunParallel()
 	} else {
-		f.Run()
+		f.RunSequencial()
 	}
 	return f.index
 }
