@@ -5,7 +5,6 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io"
-	"os"
 	"strings"
 
 	"aoc2016/internal/utils"
@@ -18,16 +17,8 @@ func MD5Hash(passcode string, path string) string {
 	return hex.EncodeToString(hasher.Sum(nil))
 }
 
-func readAllFile(filename string) (string, error) {
-	bytes, err := os.ReadFile(filename)
-	if err != nil {
-		return "", err
-	}
-	return string(bytes), nil
-}
-
 func parseFile(filename string) (string, error) {
-	content, err := readAllFile(filename)
+	content, err := utils.ReadAllFile(filename)
 	if err != nil {
 		return "", err
 	}

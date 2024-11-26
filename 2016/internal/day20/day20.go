@@ -3,21 +3,12 @@ package day20
 import (
 	"cmp"
 	"fmt"
-	"os"
 	"slices"
 	"strconv"
 	"strings"
 
 	"aoc2016/internal/utils"
 )
-
-func readAllFile(filename string) (string, error) {
-	bytes, err := os.ReadFile(filename)
-	if err != nil {
-		return "", err
-	}
-	return string(bytes), nil
-}
 
 type Range struct {
 	Begin int
@@ -60,7 +51,7 @@ func parseContent(content string) ([]Range, error) {
 }
 
 func parseFile(filename string) ([]Range, error) {
-	content, err := readAllFile(filename)
+	content, err := utils.ReadAllFile(filename)
 	if err != nil {
 		return nil, err
 	}

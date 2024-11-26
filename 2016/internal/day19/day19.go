@@ -2,23 +2,14 @@ package day19
 
 import (
 	"fmt"
-	"os"
 	"strconv"
 	"strings"
 
 	"aoc2016/internal/utils"
 )
 
-func readAllFile(filename string) (string, error) {
-	bytes, err := os.ReadFile(filename)
-	if err != nil {
-		return "", err
-	}
-	return string(bytes), nil
-}
-
 func parseFile(filename string) (int, error) {
-	content, err := readAllFile(filename)
+	content, err := utils.ReadAllFile(filename)
 	if err != nil {
 		return 0, err
 	}

@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"os"
 	"time"
 )
 
@@ -26,6 +27,14 @@ func Min(x, y int) int {
 		return x
 	}
 	return y
+}
+
+func ReadAllFile(filename string) (string, error) {
+	bytes, err := os.ReadFile(filename)
+	if err != nil {
+		return "", err
+	}
+	return string(bytes), nil
 }
 
 func TimeIt(name, format string, f func() any) {

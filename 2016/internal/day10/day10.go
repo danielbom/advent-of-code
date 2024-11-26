@@ -3,7 +3,6 @@ package day10
 import (
 	"cmp"
 	"fmt"
-	"os"
 	"regexp"
 	"slices"
 	"strconv"
@@ -11,14 +10,6 @@ import (
 
 	"aoc2016/internal/utils"
 )
-
-func readAllFile(filename string) (string, error) {
-	bytes, err := os.ReadFile(filename)
-	if err != nil {
-		return "", err
-	}
-	return string(bytes), nil
-}
 
 type GiveTo int
 
@@ -130,7 +121,7 @@ func (p *ParseInstruction) ParseLines(content string) (Instructions, error) {
 }
 
 func parseFile(filename string) (Instructions, error) {
-	content, err := readAllFile(filename)
+	content, err := utils.ReadAllFile(filename)
 	if err != nil {
 		var none Instructions
 		return none, err

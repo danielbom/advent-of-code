@@ -3,21 +3,12 @@ package day04
 import (
 	"cmp"
 	"fmt"
-	"os"
 	"slices"
 	"strconv"
 	"strings"
 
 	"aoc2016/internal/utils"
 )
-
-func readAllFile(filename string) (string, error) {
-	bytes, err := os.ReadFile(filename)
-	if err != nil {
-		return "", err
-	}
-	return string(bytes), nil
-}
 
 type EncryptedName struct {
 	Name     string
@@ -108,7 +99,7 @@ func parseContent(content string) ([]EncryptedName, error) {
 }
 
 func parseFile(filename string) ([]EncryptedName, error) {
-	content, err := readAllFile(filename)
+	content, err := utils.ReadAllFile(filename)
 	if err != nil {
 		return nil, err
 	}

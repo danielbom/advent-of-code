@@ -2,20 +2,11 @@ package day03
 
 import (
 	"fmt"
-	"os"
 	"strconv"
 	"strings"
 
 	"aoc2016/internal/utils"
 )
-
-func readAllFile(filename string) (string, error) {
-	bytes, err := os.ReadFile(filename)
-	if err != nil {
-		return "", err
-	}
-	return string(bytes), nil
-}
 
 type Triangle struct {
 	A int
@@ -77,7 +68,7 @@ func parseContent(content string) ([]Triangle, error) {
 }
 
 func parseFile(filename string) ([]Triangle, error) {
-	content, err := readAllFile(filename)
+	content, err := utils.ReadAllFile(filename)
 	if err != nil {
 		return nil, err
 	}

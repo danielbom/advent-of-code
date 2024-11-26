@@ -2,7 +2,6 @@ package day18
 
 import (
 	"fmt"
-	"os"
 	"slices"
 	"strings"
 
@@ -71,16 +70,8 @@ func (row Row) String() string {
 	return string(row[1 : len(row)-1])
 }
 
-func readAllFile(filename string) (string, error) {
-	bytes, err := os.ReadFile(filename)
-	if err != nil {
-		return "", err
-	}
-	return string(bytes), nil
-}
-
 func parseFile(filename string) (Row, error) {
-	content, err := readAllFile(filename)
+	content, err := utils.ReadAllFile(filename)
 	if err != nil {
 		return Row(nil), err
 	}

@@ -2,20 +2,11 @@ package day08
 
 import (
 	"fmt"
-	"os"
 	"strconv"
 	"strings"
 
 	"aoc2016/internal/utils"
 )
-
-func readAllFile(filename string) (string, error) {
-	bytes, err := os.ReadFile(filename)
-	if err != nil {
-		return "", err
-	}
-	return string(bytes), nil
-}
 
 type FillRect struct {
 	Row int
@@ -102,7 +93,7 @@ func parseContent(content string) ([]Instruction, error) {
 }
 
 func parseFile(filename string) ([]Instruction, error) {
-	content, err := readAllFile(filename)
+	content, err := utils.ReadAllFile(filename)
 	if err != nil {
 		return nil, err
 	}

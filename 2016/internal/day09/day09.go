@@ -2,7 +2,6 @@ package day09
 
 import (
 	"fmt"
-	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -11,16 +10,9 @@ import (
 	"aoc2016/internal/utils"
 )
 
-func readAllFile(filename string) (string, error) {
-	bytes, err := os.ReadFile(filename)
-	if err != nil {
-		return "", err
-	}
-	return string(bytes), nil
-}
-
 func parseFile(filename string) (string, error) {
-	return readAllFile(filename)
+	content, err := utils.ReadAllFile(filename)
+	return strings.TrimSpace(content), err
 }
 
 // Decompressor
