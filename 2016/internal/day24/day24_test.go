@@ -30,7 +30,6 @@ func TestPart1(t *testing.T) {
 	}
 }
 
-
 func TestPart2(t *testing.T) {
 	content := `###########
 #0.1.....2#
