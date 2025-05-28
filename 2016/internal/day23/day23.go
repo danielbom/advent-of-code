@@ -225,8 +225,8 @@ func (p Program) getValue(valReg ValReg) (int, bool) {
 }
 
 func (p Program) Run(isBase []Instruction) {
-  is := make([]Instruction, len(isBase))
-  copy(is, isBase)
+	is := make([]Instruction, len(isBase))
+	copy(is, isBase)
 	for 0 <= p.pc && p.pc < len(is) {
 		inst := is[p.pc]
 		switch t := inst.(type) {
@@ -334,7 +334,7 @@ func part2(is []Instruction) int {
 	}
 	*a = 12
 	p.Run(is)
-	return *p.GetRegister('a')
+	return *a
 }
 
 func Solve() {
