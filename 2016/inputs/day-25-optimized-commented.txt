@@ -1,0 +1,62 @@
+--python
+-- a = input()
+-- b = 643
+-- c = 4
+-- d = c * b
+-- b = 0
+-- c = 0
+-- while True: # (begin)
+--   a = d
+--   while a > 0:
+--     b = a % 2
+--     a = a // 2
+--     print(b)
+
+cpy a d
+cpy 4 c
+cpy 643 b
+
+--inc d
+--dec b
+--jnz b -2
+--dec c
+--jnz c -5
+-- Translated to:
+-- 'd = 'c * 'b
+-- 'b = 'c = 0
+
+mul c b
+add d c
+cpy 0 c
+cpy 0 b
+
+-- (begin)
+cpy d a
+
+--cpy a b
+--cpy 0 a
+--cpy 2 c
+--jnz b 2
+--jnz 1 6
+--dec b
+--dec c
+--jnz c -4
+--inc a
+--jnz 1 -7
+--cpy 2 b
+--jnz c 2
+--jnz 1 4
+--dec b
+--dec c
+--jnz 1 -4
+-- Translated to:
+-- 'b = 'a % 2
+-- 'a = 'a / 2
+
+cpy 2 b
+div a b
+
+out b
+jnz a -3
+-- Jump to (begin) and loops forever with the initial value of 'd
+--jnz 1 -21

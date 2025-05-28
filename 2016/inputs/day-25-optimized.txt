@@ -1,0 +1,12 @@
+cpy a d
+cpy 4 c
+cpy 643 b
+mul c b
+add d c
+cpy 0 c
+cpy 0 b
+cpy d a
+cpy 2 b
+div a b
+out b
+jnz a -3
