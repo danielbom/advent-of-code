@@ -272,56 +272,56 @@ func part2(is []FileSystemItem) int {
 		}
 	}
 	dist2 := dist[0][0]
-  if DEBUG {
-    path := make(map[Point]bool)
-    curr := best
-    for dist[curr.Y][curr.X] != dist1 {
-      y, x := curr.Y, curr.X
-      path[curr] = true
-      if y > 0 && dist[y][x]-1 == dist[y-1][x] {
-        curr = NewPoint(y-1, x)
-        continue
-      }
-      if y < rows-1 && dist[y][x]-1 == dist[y+1][x] {
-        curr = NewPoint(y+1, x)
-        continue
-      }
-      if x > 0 && dist[y][x]-1 == dist[y][x-1] {
-        curr = NewPoint(y, x-1)
-        continue
-      }
-      if x < cols-1 && dist[y][x]-1 == dist[y][x+1] {
-        curr = NewPoint(y, x+1)
-        continue
-      }
-      break
-    }
-    fmt.Println(dist1, dist2)
-    mode := 1
-    for y := 0; y < rows; y++ {
-      for x := 0; x < cols; x++ {
-        if x > 0 {
-          fmt.Printf(" ")
-        }
-        p := NewPoint(y, x)
-        if mode == 1 {
-          if !path[p] {
-            fmt.Printf("%3s", " ")
-          } else {
-            fmt.Printf("%3d", dist1-dist[y][x])
-          }
-        } else {
-          if dist[y][x] == 1 << 32 {
-            fmt.Printf("%3s", "- ")
-          } else {
-            fmt.Printf("%3d", dist1-dist[y][x])
-          }
-        }
-      }
-      fmt.Println()
-    }
+	if DEBUG {
+		path := make(map[Point]bool)
+		curr := best
+		for dist[curr.Y][curr.X] != dist1 {
+			y, x := curr.Y, curr.X
+			path[curr] = true
+			if y > 0 && dist[y][x]-1 == dist[y-1][x] {
+				curr = NewPoint(y-1, x)
+				continue
+			}
+			if y < rows-1 && dist[y][x]-1 == dist[y+1][x] {
+				curr = NewPoint(y+1, x)
+				continue
+			}
+			if x > 0 && dist[y][x]-1 == dist[y][x-1] {
+				curr = NewPoint(y, x-1)
+				continue
+			}
+			if x < cols-1 && dist[y][x]-1 == dist[y][x+1] {
+				curr = NewPoint(y, x+1)
+				continue
+			}
+			break
+		}
+		fmt.Println(dist1, dist2)
+		mode := 1
+		for y := 0; y < rows; y++ {
+			for x := 0; x < cols; x++ {
+				if x > 0 {
+					fmt.Printf(" ")
+				}
+				p := NewPoint(y, x)
+				if mode == 1 {
+					if !path[p] {
+						fmt.Printf("%3s", " ")
+					} else {
+						fmt.Printf("%3d", dist1-dist[y][x])
+					}
+				} else {
+					if dist[y][x] == 1<<32 {
+						fmt.Printf("%3s", "- ")
+					} else {
+						fmt.Printf("%3d", dist1-dist[y][x])
+					}
+				}
+			}
+			fmt.Println()
+		}
 	}
-	return (dist1+1) + (dist2-1)*5
+	return (dist1 + 1) + (dist2-1)*5
 }
 
 func Solve() {
