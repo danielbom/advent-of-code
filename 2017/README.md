@@ -5,6 +5,8 @@
 https://hexdocs.pm/gleam_stdlib/index.html
 https://hex.pm/packages/
 https://packages.gleam.run/
+https://learnxinyminutes.com/gleam/
+https://erikarow.land/notes/using-use-gleam
 
 ## Development
 
