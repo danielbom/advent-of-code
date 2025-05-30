@@ -6,6 +6,7 @@ import argv
 
 import day_01
 import day_02
+import day_03
 
 fn foreach(begin: Int, end: Int, func: fn(Int) -> Nil) -> Nil {
   case begin <= end {
@@ -29,7 +30,7 @@ fn run(day: Int) -> Nil {
       day_02.solve()
     }
     3 -> {
-      Nil
+      day_03.solve()
     }
     4 -> {
       Nil

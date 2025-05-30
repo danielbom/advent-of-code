@@ -2,7 +2,6 @@ import gleeunit
 import gleeunit/should
 
 import gleam/list
-import gleam/pair
 
 import day_01
 
@@ -14,10 +13,9 @@ pub fn part1_test() {
   let inputs = [#("1122", 3), #("1111", 4), #("1234", 0), #("91212129", 9)]
 
   list.map(inputs, fn(p) {
-    let input = pair.first(p)
-    let expected = pair.second(p)
-    day_01.part1(input)
-    |> should.equal(expected)
+    let #(input, expected) = p
+    let result = day_01.part1(input)
+    should.equal(result, expected)
   })
 }
 
@@ -31,9 +29,8 @@ pub fn part2_test() {
   ]
 
   list.map(inputs, fn(p) {
-    let input = pair.first(p)
-    let expected = pair.second(p)
-    day_01.part2(input)
-    |> should.equal(expected)
+    let #(input, expected) = p
+    let result = day_01.part2(input)
+    should.equal(result, expected)
   })
 }

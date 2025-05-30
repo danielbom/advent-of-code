@@ -64,10 +64,11 @@ fn evenly_divisible_loop(items: List(Int)) -> Result(Int, Nil) {
           }
         })
       case evenly_divisor {
-        Ok(other) -> Ok(case other >= first {
-          True -> other / first
-          False -> first / other
-        })
+        Ok(other) ->
+          Ok(case other >= first {
+            True -> other / first
+            False -> first / other
+          })
         Error(_) -> evenly_divisible_loop(rest)
       }
     }
