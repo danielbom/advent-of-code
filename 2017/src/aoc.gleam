@@ -7,6 +7,7 @@ import argv
 import day_01
 import day_02
 import day_03
+import day_04
 
 fn foreach(begin: Int, end: Int, func: fn(Int) -> Nil) -> Nil {
   case begin <= end {
@@ -33,7 +34,7 @@ fn run(day: Int) -> Nil {
       day_03.solve()
     }
     4 -> {
-      Nil
+      day_04.solve()
     }
     5 -> {
       Nil
@@ -110,7 +111,6 @@ pub fn main() -> Nil {
     |> list.map(int.parse)
     |> result.values()
   case args {
-    [] -> run(0)
     [day] -> run(day)
     _ -> panic as "invalid amount of arguments"
   }

@@ -181,4 +181,3 @@ pub fn solve() {
   utils.time_it("Part 1", fn() { part1(input) |> int.to_string() })
   utils.time_it("Part 2", fn() { part2(input) |> int.to_string() })
 }
-
