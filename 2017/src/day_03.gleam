@@ -3,6 +3,7 @@ import gleam/dict.{type Dict}
 import gleam/int
 import gleam/io
 import gleam/list
+import gleam/option.{type Option, None, Some}
 import gleam/result
 import gleam/string
 
@@ -78,16 +79,16 @@ fn spiral_next(s: Spiral) -> #(Spiral, Spiral) {
   #(s1, s2)
 }
 
-fn find_spiral_loop(x: Int, s: Spiral) -> Spiral {
-  use <- bool.guard(s.index >= x, s)
+fn find_spiral_loop(ix: Int, s: Spiral) -> Spiral {
+  use <- bool.guard(s.index >= ix, s)
   let #(s1, s2) = spiral_next(s)
-  use <- bool.guard(s1.index >= x, s1)
-  find_spiral_loop(x, s2)
+  use <- bool.guard(s1.index >= ix, s1)
+  find_spiral_loop(ix, s2)
 }
 
-fn find_spiral(x: Int) -> Spiral {
+fn find_spiral(ix: Int) -> Spiral {
   let start = Spiral(1, #(0, 0), 0, Down)
-  find_spiral_loop(x, start)
+  find_spiral_loop(ix, start)
 }
 
 fn adjusted_steps_shortest_path(s: Spiral, index: Int) -> Int {
@@ -114,63 +115,92 @@ pub fn part1(s: String) -> Int {
 type Map =
   Dict(#(Int, Int), Int)
 
-fn squares_update_list(
-  m: Map,
-  ix: Int,
+/// Computes the sum of all adjacent neighbor values around a point.
+///
+/// Missing neighbors contribute `0` to the total.
+fn sum_of_computed_adjacent_neighbors(map: Map, p: Point) -> Int {
+  [
+    point_add(p, #(-1, -1)),
+    point_add(p, #(0, -1)),
+    point_add(p, #(1, -1)),
+    point_add(p, #(-1, 0)),
+    //point_add(p, #(0, 0)),
+    point_add(p, #(1, 0)),
+    point_add(p, #(-1, 1)),
+    point_add(p, #(0, 1)),
+    point_add(p, #(1, 1)),
+  ]
+  |> list.map(dict.get(map, _))
+  |> result.values()
+  |> int.sum()
+}
+
+fn fill_spiral_until_greater_loop(
+  map: Map,
+  x: Int,
   curr: Point,
   end: Point,
   inc: Point,
-) -> #(Map, List(Int)) {
-  let value =
-    [
-      dict.get(m, point_add(curr, #(-1, -1))),
-      dict.get(m, point_add(curr, #(0, -1))),
-      dict.get(m, point_add(curr, #(1, -1))),
-      dict.get(m, point_add(curr, #(-1, 0))),
-      //dict.get(m, point_add(curr, #(0, 0))),
-      dict.get(m, point_add(curr, #(1, 0))),
-      dict.get(m, point_add(curr, #(-1, 1))),
-      dict.get(m, point_add(curr, #(0, 1))),
-      dict.get(m, point_add(curr, #(1, 1))),
-    ]
-    |> result.values()
-    |> int.sum()
-  let nm = dict.insert(m, curr, value)
-  use <- bool.lazy_guard(value > ix, fn() { #(nm, [value]) })
-  use <- bool.lazy_guard(curr == end, fn() { #(nm, []) })
-  squares_update_list(nm, ix, point_add(curr, inc), end, inc)
+) -> #(Map, Option(Int)) {
+  let value = sum_of_computed_adjacent_neighbors(map, curr)
+  let new_map = dict.insert(map, curr, value)
+  use <- bool.lazy_guard(value > x, fn() { #(new_map, Some(value)) })
+  use <- bool.lazy_guard(curr == end, fn() { #(new_map, None) })
+  fill_spiral_until_greater_loop(new_map, x, point_add(curr, inc), end, inc)
 }
 
-fn squares_update(
-  m: Map,
-  ix: Int,
+/// Updates spiral positions from `begin` to `end`,
+/// storing computed values in the map until a value
+/// greater than `x` is found.
+///
+/// Returns the updated map and the matching value, if any.
+fn fill_spiral_until_greater(
+  map: Map,
+  x: Int,
   begin: Spiral,
   end: Spiral,
-) -> #(Map, List(Int)) {
+) -> #(Map, Option(Int)) {
   let dir = dir_to_point(end.dir)
-  squares_update_list(m, ix, point_add(begin.point, dir), end.point, dir)
+  fill_spiral_until_greater_loop(
+    map,
+    x,
+    point_add(begin.point, dir),
+    end.point,
+    dir,
+  )
 }
 
-fn find_first_largest_value(ix: Int, s0: Spiral, m0: Map) -> List(Int) {
-  let #(s1, s2) = spiral_next(s0)
-  let #(m1, end1) = squares_update(m0, ix, s0, s1)
-  use <- bool.guard(!list.is_empty(end1), end1)
-  let #(m2, end2) = squares_update(m1, ix, s1, s2)
-  use <- bool.guard(!list.is_empty(end2), end2)
-  find_first_largest_value(ix, s2, m2)
+/// Iterates through spiral positions and returns
+/// the first computed value greater than `x`.
+///
+/// Each position value is derived from its adjacent neighbors
+/// and stored in the map during traversal.
+///
+/// Returns `Some(value)` if found, otherwise `None`.
+fn find_first_value_greater_than_loop(
+  x: Int,
+  s: Spiral,
+  map: Map,
+) -> Option(Int) {
+  let #(s1, s2) = spiral_next(s)
+  let #(m1, end1) = fill_spiral_until_greater(map, x, s, s1)
+  use <- option.lazy_or(end1)
+  let #(m2, end2) = fill_spiral_until_greater(m1, x, s1, s2)
+  use <- option.lazy_or(end2)
+  find_first_value_greater_than_loop(x, s2, m2)
 }
 
-fn first_largest_value(index_squared: Int) -> Int {
-  use <- bool.guard(index_squared < 1, 1)
+fn find_first_value_greater_than(x: Int) -> Int {
+  use <- bool.guard(x < 1, 1)
   let start = Spiral(1, #(0, 0), 0, Down)
-  let map: Map = dict.from_list([#(start.point, 1)])
-  let assert [result] = find_first_largest_value(index_squared, start, map)
+  let map = dict.from_list([#(start.point, 1)])
+  let assert Some(result) = find_first_value_greater_than_loop(x, start, map)
   result
 }
 
 pub fn part2(s: String) -> Int {
   case int.parse(s) {
-    Ok(x) -> first_largest_value(x)
+    Ok(x) -> find_first_value_greater_than(x)
     Error(_) -> -1
   }
 }

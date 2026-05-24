@@ -12,6 +12,7 @@ pub fn passphrase_uniq_words(pass: String) -> Bool {
   list.length(words) == set.size(uniqs)
 }
 
+/// Counts how many lines contain only unique words.
 pub fn part1(s: String) -> Int {
   string.split(s, on: "\n")
   |> list.filter(passphrase_uniq_words)
@@ -40,6 +41,7 @@ fn passphrase_no_anagrams(pass: String) -> Bool {
   |> passphrase_no_anagrams_loop()
 }
 
+/// Counts how many lines contain no anagram-equivalent words.
 pub fn part2(s: String) -> Int {
   string.split(s, on: "\n")
   |> list.filter(passphrase_no_anagrams)

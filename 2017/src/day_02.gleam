@@ -22,14 +22,8 @@ fn parse(s: String) -> Result(List(List(Int)), Nil) {
   |> result.all()
 }
 
-fn mapped_rows_sum(s: String, func: fn(List(Int)) -> Int) -> Int {
-  parse(s)
-  |> result.map(fn(xss) {
-    xss
-    |> list.map(func)
-    |> int.sum()
-  })
-  |> result.unwrap(-1)
+fn sum_by(xs: List(a), by: fn(a) -> Int) -> Int {
+  list.fold(xs, 0, fn(curr, x) { curr + by(x) })
 }
 
 fn minmax_difference(xs: List(Int)) -> Int {
@@ -46,12 +40,18 @@ fn minmax_difference(xs: List(Int)) -> Int {
   }
 }
 
+/// Computes the spreadsheet checksum.
+///
+/// For each line, finds the difference between the largest
+/// and smallest whitespace-separated numbers, then returns
+/// the sum of all line differences.
 pub fn part1(s: String) -> Int {
-  mapped_rows_sum(s, minmax_difference)
+  case parse(s) {
+    Ok(xss) -> sum_by(xss, minmax_difference)
+    Error(_) -> -1
+  }
 }
 
-// adaptation of gleam/list function
-// https://github.com/gleam-lang/stdlib/blob/v0.60.0/src/gleam/list.gleam#L2159-L2159
 fn evenly_divisible_loop(items: List(Int)) -> Result(Int, Nil) {
   case items {
     [] -> Error(Nil)
@@ -82,8 +82,15 @@ fn evenly_divisible(xs: List(Int)) -> Int {
   }
 }
 
+/// Computes the spreadsheet checksum using evenly divisible values.
+///
+/// For each line, finds the only pair of numbers where one evenly
+/// divides the other, then adds the division result to the total.
 pub fn part2(s: String) -> Int {
-  mapped_rows_sum(s, evenly_divisible)
+  case parse(s) {
+    Ok(xss) -> sum_by(xss, evenly_divisible)
+    Error(_) -> -1
+  }
 }
 
 pub fn solve() {

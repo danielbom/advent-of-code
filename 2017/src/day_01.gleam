@@ -18,10 +18,20 @@ fn sum_digits_windowed(s: String, gap: Int) -> Int {
   |> result.unwrap(-1)
 }
 
+/// Computes the sum of all digits that match the next digit
+/// in a circular sequence.
+///
+/// Each digit is compared with the following digit,
+/// where the last digit wraps around to the first.
 pub fn part1(s: String) -> Int {
   sum_digits_windowed(s, 1)
 }
 
+/// Computes the sum of all digits that match the digit
+/// halfway around the circular sequence.
+///
+/// Each digit is compared with the digit located
+/// `len / 2` positions ahead, wrapping around the string. 
 pub fn part2(s: String) -> Int {
   sum_digits_windowed(s, string.length(s) / 2)
 }

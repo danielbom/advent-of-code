@@ -10,7 +10,13 @@ pub fn main() -> Nil {
 }
 
 pub fn part1_test() {
-  let inputs = [#("1122", 3), #("1111", 4), #("1234", 0), #("91212129", 9)]
+  let inputs = [
+    //
+    #("1122", 3),
+    #("1111", 4),
+    #("1234", 0),
+    #("91212129", 9),
+  ]
 
   list.map(inputs, fn(p) {
     let #(input, expected) = p
