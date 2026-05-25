@@ -10,6 +10,7 @@ import day_03
 import day_04
 import day_05
 import day_06
+import day_07
 
 fn foreach(begin: Int, end: Int, func: fn(Int) -> Nil) -> Nil {
   case begin <= end {
@@ -23,87 +24,33 @@ fn foreach(begin: Int, end: Int, func: fn(Int) -> Nil) -> Nil {
 
 fn run(day: Int) -> Nil {
   case day {
-    0 -> {
-      foreach(1, 25, fn(i) { run(i) })
-    }
-    1 -> {
-      day_01.solve()
-    }
-    2 -> {
-      day_02.solve()
-    }
-    3 -> {
-      day_03.solve()
-    }
-    4 -> {
-      day_04.solve()
-    }
-    5 -> {
-      day_05.solve()
-    }
-    6 -> {
-      day_06.solve()
-    }
-    7 -> {
-      Nil
-    }
-    8 -> {
-      Nil
-    }
-    9 -> {
-      Nil
-    }
-    10 -> {
-      Nil
-    }
-    11 -> {
-      Nil
-    }
-    12 -> {
-      Nil
-    }
-    13 -> {
-      Nil
-    }
-    14 -> {
-      Nil
-    }
-    15 -> {
-      Nil
-    }
-    16 -> {
-      Nil
-    }
-    17 -> {
-      Nil
-    }
-    18 -> {
-      Nil
-    }
-    19 -> {
-      Nil
-    }
-    20 -> {
-      Nil
-    }
-    21 -> {
-      Nil
-    }
-    22 -> {
-      Nil
-    }
-    23 -> {
-      Nil
-    }
-    24 -> {
-      Nil
-    }
-    25 -> {
-      Nil
-    }
-    _ -> {
-      panic as "invalid day"
-    }
+    0 -> foreach(1, 25, run)
+    1 -> day_01.solve()
+    2 -> day_02.solve()
+    3 -> day_03.solve()
+    4 -> day_04.solve()
+    5 -> day_05.solve()
+    6 -> day_06.solve()
+    7 -> day_07.solve()
+    8 -> Nil
+    9 -> Nil
+    10 -> Nil
+    11 -> Nil
+    12 -> Nil
+    13 -> Nil
+    14 -> Nil
+    15 -> Nil
+    16 -> Nil
+    17 -> Nil
+    18 -> Nil
+    19 -> Nil
+    20 -> Nil
+    21 -> Nil
+    22 -> Nil
+    23 -> Nil
+    24 -> Nil
+    25 -> Nil
+    _ -> panic as "invalid day"
   }
 }
 
