@@ -1,8 +1,9 @@
-import gleam/dict.{type Dict}
 import gleam/int
 import gleam/io
 import gleam/list
 import gleam/string
+
+import iv.{type Array}
 
 import utils
 
@@ -17,18 +18,18 @@ fn strict_int_parse(x: String) -> Int {
 ///
 /// Keys represent instruction indices;
 /// values represent jump offsets.
-fn parse(s: String) -> Dict(Int, Int) {
+fn parse(s: String) -> Array(Int) {
   string.split(s, on: "\n")
-  |> list.index_map(fn(x, i) { #(i, strict_int_parse(x)) })
-  |> dict.from_list()
+  |> list.map(strict_int_parse)
+  |> iv.from_list()
 }
 
 /// Counts the steps required to exit the jump instructions,
 /// increasing each visited offset by `1`.
-fn count_steps_1(steps: Int, index: Int, view: Dict(Int, Int)) -> Int {
-  case dict.get(view, index) {
+fn count_steps_1(steps: Int, index: Int, view: Array(Int)) -> Int {
+  case iv.get(view, index) {
     Ok(count) -> {
-      let view = dict.insert(view, index, count + 1)
+      let view = iv.try_set(view, index, count + 1)
       count_steps_1(steps + 1, index + count, view)
     }
     Error(_) -> steps
@@ -43,11 +44,11 @@ pub fn part1(s: String) -> Int {
 ///
 /// Visited offsets greater than or equal to `3` are decreased by `1`;
 /// otherwise they are increased by `1`.
-fn count_steps_2(steps: Int, index: Int, view: Dict(Int, Int)) -> Int {
-  case dict.get(view, index) {
+fn count_steps_2(steps: Int, index: Int, view: Array(Int)) -> Int {
+  case iv.get(view, index) {
     Ok(count) -> {
       let view =
-        dict.insert(view, index, case count >= 3 {
+        iv.try_set(view, index, case count >= 3 {
           True -> count - 1
           False -> count + 1
         })
