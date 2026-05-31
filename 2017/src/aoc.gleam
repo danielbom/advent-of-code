@@ -16,6 +16,7 @@ import day_09
 import day_10
 import day_11
 import day_12
+import day_13
 
 fn foreach(begin: Int, end: Int, func: fn(Int) -> Nil) -> Nil {
   case begin <= end {
@@ -42,7 +43,7 @@ fn run(day: Int) -> Nil {
     10 -> day_10.solve()
     11 -> day_11.solve()
     12 -> day_12.solve()
-    13 -> Nil
+    13 -> day_13.solve()
     14 -> Nil
     15 -> Nil
     16 -> Nil
