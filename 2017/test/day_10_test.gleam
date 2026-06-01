@@ -18,7 +18,7 @@ pub fn knot_hash_check_test() {
   list.map(inputs, fn(p) {
     let #(input, size, expected) = p
     let result = day_10.knot_hash_check(input, size)
-    should.equal(#(input, result), #(input, expected))
+    should.equal(result, expected)
   })
 }
 
@@ -33,6 +33,6 @@ pub fn part2_test() {
   list.map(inputs, fn(p) {
     let #(input, expected) = p
     let result = day_10.part2(input)
-    should.equal(#(input, result), #(input, expected))
+    should.equal(result, expected)
   })
 }

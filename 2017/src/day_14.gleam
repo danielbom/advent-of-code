@@ -1,6 +1,8 @@
+import gleam/bit_array
 import gleam/int
 import gleam/io
 import gleam/list
+import gleam/result
 import gleam/string
 import gleam/string_tree as st
 
@@ -137,38 +139,143 @@ fn parse_ascii_codes(s: String) -> List(Int) {
   |> list.map(string.utf_codepoint_to_int)
 }
 
-/// Parses a comma-separated list of integers.
-fn parse_lengths(s: String) -> List(Int) {
-  string.trim(s)
-  |> string.split(on: ",")
-  |> list.map(fn(value) {
-    let assert Ok(value) = int.parse(value)
-    value
+fn extract_bits_loop(array: BitArray, acc: List(Bool)) {
+  case array {
+    <<bit:size(1), rest:bits>> -> extract_bits_loop(rest, [bit == 1, ..acc])
+    <<>> -> iv.from_reverse_list(acc)
+    _ -> panic as "unreachable"
+  }
+}
+
+fn extract_bits(array: BitArray) {
+  extract_bits_loop(array, [])
+}
+
+type Matrix(a) =
+  Array(Array(a))
+
+fn build_matrix_loop(
+  acc: List(Array(Bool)),
+  s: String,
+  index: Int,
+) -> Matrix(Bool) {
+  case index < 128 {
+    True -> {
+      let assert Ok(row) =
+        string.append(s, "-")
+        |> string.append(int.to_string(index))
+        |> parse_ascii_codes()
+        |> knot_hash_hex()
+        |> bit_array.base16_decode()
+      let row = extract_bits(row)
+      build_matrix_loop([row, ..acc], s, index + 1)
+    }
+    False -> iv.from_reverse_list(acc)
+  }
+}
+
+fn build_matrix(s: String) -> Matrix(Bool) {
+  build_matrix_loop([], s, 0)
+}
+
+pub fn count_set_bits(acc: Int, array: Array(Bool)) {
+  iv.fold(array, acc, fn(count, set) {
+    case set {
+      True -> count + 1
+      False -> count
+    }
   })
 }
 
-/// Computes the product of the first two hash values after one round.
-pub fn knot_hash_check(lengths: List(Int), size: Int) {
-  let hash = Hash(items: iv.initialise(size, fn(x) { x }), size: size)
-  let result = knot_hash(1, lengths, hash)
-  let fisrt = hash_get(result, 0)
-  let second = hash_get(result, 1)
-  fisrt * second
+/// Counts the total number of set bits (True values) in the memory grid.
+fn count_used_space(memory: Matrix(Bool)) {
+  iv.fold(memory, 0, count_set_bits)
 }
 
+/// Counts the total number of set bits in the memory grid.
 pub fn part1(s: String) {
-  let lengths = parse_lengths(s)
-  knot_hash_check(lengths, standard_list_size)
+  string.trim(s)
+  |> build_matrix()
+  |> count_used_space()
 }
 
+fn matrix_get_or(matrix: Matrix(a), y: Int, x: Int, default: a) -> a {
+  iv.get(matrix, y)
+  |> result.try(iv.get(_, x))
+  |> result.unwrap(default)
+}
+
+fn matrix_set(matrix: Matrix(a), y: Int, x: Int, value: a) -> Matrix(a) {
+  case iv.get(matrix, y) {
+    Ok(row) -> iv.try_set(matrix, y, iv.try_set(row, x, value))
+    Error(_) -> matrix
+  }
+}
+
+/// Recursively flood-fills a connected region of set bits with a group ID.
+fn fill_group(
+  groups: Matrix(Int),
+  memory: Matrix(Bool),
+  y: Int,
+  x: Int,
+  group: Int,
+) {
+  case matrix_get_or(memory, y, x, False), matrix_get_or(groups, y, x, -1) {
+    True, 0 -> {
+      groups
+      |> matrix_set(y, x, group)
+      |> fill_group(memory, y - 1, x, group)
+      |> fill_group(memory, y + 1, x, group)
+      |> fill_group(memory, y, x - 1, group)
+      |> fill_group(memory, y, x + 1, group)
+    }
+    _, _ -> groups
+  }
+}
+
+/// Scans the memory grid to count distinct connected regions of set bits.
+fn count_used_space_regions_loop(
+  memory: Matrix(Bool),
+  groups: Matrix(Int),
+  y: Int,
+  x: Int,
+  count: Int,
+) {
+  let #(ny, nx) = case x < 127 {
+    True -> #(y, x + 1)
+    False -> #(y + 1, 0)
+  }
+  case matrix_get_or(memory, y, x, False), matrix_get_or(groups, y, x, -1) {
+    _, -1 -> count
+    True, 0 -> {
+      let count = count + 1
+      let groups = fill_group(groups, memory, y, x, count)
+      count_used_space_regions_loop(memory, groups, ny, nx, count)
+    }
+    _, _ -> {
+      count_used_space_regions_loop(memory, groups, ny, nx, count)
+    }
+  }
+}
+
+/// Counts the number of distinct connected regions in the memory grid.
+fn count_used_space_regions(memory: Matrix(Bool)) {
+  let n = iv.size(memory)
+  let row = iv.initialise(n, fn(_) { 0 })
+  let groups = iv.initialise(n, fn(_) { row })
+  count_used_space_regions_loop(memory, groups, 0, 0, 0)
+}
+
+/// Counts the number of distinct connected regions of set bits in the grid.
 pub fn part2(s: String) {
-  parse_ascii_codes(s)
-  |> knot_hash_hex()
+  string.trim(s)
+  |> build_matrix()
+  |> count_used_space_regions()
 }
 
 pub fn solve() {
-  let input = utils.read_all_file("inputs/day-10.txt") |> string.trim()
-  io.println("Day 10")
+  let input = utils.read_all_file("inputs/day-14.txt") |> string.trim()
+  io.println("Day 14")
   utils.time_it("Part 1", fn() { part1(input) |> int.to_string() })
-  utils.time_it("Part 2", fn() { part2(input) })
+  utils.time_it("Part 2", fn() { part2(input) |> int.to_string() })
 }
