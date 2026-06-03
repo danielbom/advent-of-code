@@ -1,4 +1,3 @@
-import gleam/bool
 import gleam/dict.{type Dict}
 import gleam/int
 import gleam/io
@@ -10,31 +9,37 @@ import iv.{type Array}
 import utils
 
 type DanceMove {
-  Spin(index: Int)
-  Exchange(index_a: Int, index_b: Int)
-  Partner(name_a: String, name_b: String)
+  Spin(Int)
+  Exchange(Int, Int)
+  Partner(String, String)
 }
 
 fn parse_moves(s: String) -> List(DanceMove) {
   string.trim(s)
   |> string.split(on: ",")
-  |> list.map(fn(item) {
-    let value = string.drop_start(item, 1)
-    use <- bool.lazy_guard(string.starts_with(item, "s"), fn() {
-      let assert Ok(value) = int.parse(value)
-      Spin(index: value)
-    })
-    use <- bool.lazy_guard(string.starts_with(item, "x"), fn() {
-      let assert Ok(#(a, b)) = string.split_once(value, on: "/")
-      let assert Ok(index_a) = int.parse(a)
-      let assert Ok(index_b) = int.parse(b)
-      Exchange(index_a:, index_b:)
-    })
-    use <- bool.lazy_guard(string.starts_with(item, "p"), fn() {
-      let assert Ok(#(name_a, name_b)) = string.split_once(value, on: "/")
-      Partner(name_a:, name_b:)
-    })
-    panic as string.append("invalid item: ", item)
+  |> list.map(fn(move) {
+    let value = string.drop_start(move, 1)
+
+    case string.first(move) {
+      Ok("s") -> {
+        let assert Ok(index) = int.parse(value)
+        Spin(index)
+      }
+
+      Ok("x") -> {
+        let assert Ok(#(a, b)) = string.split_once(value, on: "/")
+        let assert Ok(a) = int.parse(a)
+        let assert Ok(b) = int.parse(b)
+        Exchange(a, b)
+      }
+
+      Ok("p") -> {
+        let assert Ok(#(a, b)) = string.split_once(value, on: "/")
+        Partner(a, b)
+      }
+
+      _ -> panic as string.append("invalid move: ", move)
+    }
   })
 }
 
@@ -63,29 +68,30 @@ fn apply_move(programs: Array(String), move: DanceMove) -> Array(String) {
 }
 
 fn dance_loop(
-  seen: Dict(Array(String), Bool),
   moves: List(DanceMove),
   programs: Array(String),
-  count: Int,
-  repeat: Int,
-) {
-  case repeat > 0, dict.has_key(seen, programs) {
-    False, _ -> programs
-    _, True -> dance_loop(dict.new(), moves, programs, 0, { repeat % count })
-    _, False -> {
-      let seen = dict.insert(seen, programs, True)
-      let programs = list.fold(moves, programs, apply_move)
-      dance_loop(seen, moves, programs, count + 1, repeat - 1)
+  seen: Dict(Array(String), Int),
+  iteration: Int,
+  remaining: Int,
+) -> Array(String) {
+  case remaining == 0 {
+    True -> programs
+    False -> {
+      case dict.has_key(seen, programs) {
+        True ->
+          dance_loop(moves, programs, dict.new(), 0, { remaining % iteration })
+        False -> {
+          let seen = dict.insert(seen, programs, iteration)
+          let programs = list.fold(moves, programs, apply_move)
+          dance_loop(moves, programs, seen, iteration + 1, remaining - 1)
+        }
+      }
     }
   }
 }
 
-fn dance(
-  moves: List(DanceMove),
-  programs: Array(String),
-  repeat: Int,
-) -> Array(String) {
-  dance_loop(dict.new(), moves, programs, 0, repeat)
+fn dance(moves: List(DanceMove), programs: Array(String), repeat: Int) {
+  dance_loop(moves, programs, dict.new(), 0, repeat)
 }
 
 pub fn parse_and_dance(moves: String, input: String, repeat: Int) -> String {
