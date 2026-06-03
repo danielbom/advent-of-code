@@ -32,8 +32,8 @@ fn redistribute_blocks(banks: Banks, max: Int, index: Int) -> Banks {
 
 fn find_largest_bank(banks: Banks) -> #(Int, Int) {
   dict.fold(banks, #(0, -1), fn(state, index, value) {
-    let #(max, _) = state
-    case max < value {
+    let #(max, max_index) = state
+    case max_index > index && max <= value || max < value {
       True -> #(value, index)
       False -> state
     }
