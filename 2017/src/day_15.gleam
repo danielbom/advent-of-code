@@ -18,62 +18,53 @@ fn parse(s: String) -> #(Int, Int) {
   #(a, b)
 }
 
-type Gen {
-  Gen(factor: Int, value: Int, next: fn(Gen) -> Gen)
+fn increment_if_match(count: Int, a: Int, b: Int) {
+  case int.bitwise_and(a, mask) == int.bitwise_and(b, mask) {
+    True -> count + 1
+    False -> count
+  }
 }
 
-fn generator_next(gen: Gen) -> Gen {
-  let value = { gen.value * gen.factor } % max
-  Gen(..gen, value:)
-}
-
-fn generators_match(a: Gen, b: Gen) {
-  int.bitwise_and(a.value, mask) == int.bitwise_and(b.value, mask)
-}
-
-fn count_matching_pairs_loop(a: Gen, b: Gen, samples: Int, count: Int) -> Int {
+fn count_matching_pairs(a: Int, b: Int, samples: Int, count: Int) -> Int {
   case samples > 0 {
     False -> count
     True -> {
-      let count = case generators_match(a, b) {
-        True -> count + 1
-        False -> count
-      }
-      let a = a.next(a)
-      let b = b.next(b)
-      count_matching_pairs_loop(a, b, samples - 1, count)
+      let count = increment_if_match(count, a, b)
+      let a = { a * 16_807 } % max
+      let b = { b * 48_271 } % max
+      count_matching_pairs(a, b, samples - 1, count)
     }
   }
 }
 
-fn count_matching_pairs(a: Gen, b: Gen, samples: Int) -> Int {
-  count_matching_pairs_loop(a, b, samples, 0)
+fn next_multiple_of(value: Int, factor: Int, multiple_of: Int) {
+  let value = { value * factor } % max
+  case value % multiple_of == 0 {
+    True -> value
+    False -> next_multiple_of(value, factor, multiple_of)
+  }
+}
+
+fn count_matching_pairs2(a: Int, b: Int, samples: Int, count: Int) -> Int {
+  case samples > 0 {
+    False -> count
+    True -> {
+      let count = increment_if_match(count, a, b)
+      let a = next_multiple_of(a, 16_807, 4)
+      let b = next_multiple_of(b, 48_271, 8)
+      count_matching_pairs2(a, b, samples - 1, count)
+    }
+  }
 }
 
 pub fn part1(s: String) {
   let #(seed_a, seed_b) = parse(s)
-  count_matching_pairs(
-    Gen(16_807, seed_a, generator_next),
-    Gen(48_271, seed_b, generator_next),
-    40_000_000,
-  )
-}
-
-fn generator_next_multiple_of(gen: Gen, multiple_of: Int) {
-  let g = generator_next(gen)
-  case g.value % multiple_of == 0 {
-    True -> g
-    False -> generator_next_multiple_of(g, multiple_of)
-  }
+  count_matching_pairs(seed_a, seed_b, 40_000_000, 0)
 }
 
 pub fn part2(s: String) {
   let #(seed_a, seed_b) = parse(s)
-  count_matching_pairs(
-    Gen(16_807, seed_a, fn(gen) { generator_next_multiple_of(gen, 4) }),
-    Gen(48_271, seed_b, fn(gen) { generator_next_multiple_of(gen, 8) }),
-    5_000_000,
-  )
+  count_matching_pairs2(seed_a, seed_b, 5_000_000, 0)
 }
 
 pub fn solve() {
