@@ -18,7 +18,8 @@ fn parse(s: String) -> #(Int, Int) {
   #(a, b)
 }
 
-fn increment_if_match(count: Int, a: Int, b: Int) {
+@external(javascript, "./day_15_ffi.mjs", "incrementIfMatch")
+fn increment_if_match(count: Int, a: Int, b: Int) -> Int {
   case int.bitwise_and(a, mask) == int.bitwise_and(b, mask) {
     True -> count + 1
     False -> count
