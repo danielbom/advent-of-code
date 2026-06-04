@@ -23,7 +23,10 @@ pub fn part1_test() {
 }
 
 pub fn part2_test() {
-  let inputs = []
+  let inputs = [
+    // 
+    #("3", 1_222_153),
+  ]
 
   list.map(inputs, fn(p) {
     let #(input, expected) = p
