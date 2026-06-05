@@ -3,6 +3,8 @@ import gleam/io
 import gleam/list
 import gleam/string
 
+import iv
+
 import utils
 
 fn parse(s: String) -> Int {
@@ -100,11 +102,32 @@ pub fn spinlock_list_loop(
   }
 }
 
+pub fn spinlock_array_loop(
+  spin: iv.Array(Int),
+  index: Int,
+  step: Int,
+  count: Int,
+  end: Int,
+) {
+  case count <= end {
+    False -> iv.get_or_default(spin, { index + 1 } % count, 0)
+    True -> {
+      let index = { { index + step } % count } + 1
+      let spin = iv.insert_clamped(spin, index, count)
+      spinlock_array_loop(spin, index, step, count + 1, end)
+    }
+  }
+}
+
 pub fn part1(input: String) -> Int {
   let step = parse(input)
 
   spinlock_zip_loop([], [], step, 0, 2017)
-  // spinlock_list_loop([0], 0, step, 1, 2017)
+  // spinlock_list_loop([], 0, step, 0, 2017)
+  // spinlock_array_loop(iv.new(), 0, step, 0, 2017)
+  // spinlock_array_loop(iv.new(), 0, step, 0, 1_000_000) // 12602.0608ms
+  // spinlock_zip_loop([], [], step, 0, 1_000_000) // 6996.7872ms
+  // spinlock_list_loop([], 0, 3, 0, 100_000) // 85677.2608ms (8603)
 }
 
 fn value_after_zero_loop(
