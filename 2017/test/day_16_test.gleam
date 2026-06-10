@@ -1,5 +1,4 @@
 import gleeunit
-import gleeunit/should
 
 import gleam/list
 
@@ -11,7 +10,7 @@ pub fn main() -> Nil {
 
 pub fn parse_and_dance_test() {
   let inputs = [
-    // 
+    //
     #("s1,x3/4,pe/b", 1, "baedc"),
     #("s1,x3/4,pe/b", 2, "ceadb"),
     #("s1,x3/4,pe/b", 3, "ecbda"),
@@ -26,6 +25,6 @@ pub fn parse_and_dance_test() {
   list.map(inputs, fn(p) {
     let #(input, repeat, expected) = p
     let result = day_16.parse_and_dance(input, "abcde", repeat)
-    should.equal(result, expected)
+    assert result == expected
   })
 }

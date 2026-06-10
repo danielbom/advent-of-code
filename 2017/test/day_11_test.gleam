@@ -1,5 +1,4 @@
 import gleeunit
-import gleeunit/should
 
 import gleam/list
 
@@ -56,7 +55,7 @@ pub fn part1_test() {
   list.map(inputs, fn(p) {
     let #(input, expected) = p
     let result = day_11.part1(input)
-    should.equal(result, expected)
+    assert result == expected
   })
 }
 
@@ -107,6 +106,6 @@ pub fn part2_test() {
   list.map(inputs, fn(p) {
     let #(input, expected) = p
     let result = day_11.part2(input)
-    should.equal(result, expected)
+    assert result == expected
   })
 }

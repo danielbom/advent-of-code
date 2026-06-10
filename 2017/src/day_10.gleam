@@ -151,9 +151,9 @@ fn parse_lengths(s: String) -> List(Int) {
 pub fn knot_hash_check(lengths: List(Int), size: Int) {
   let hash = Hash(items: iv.initialise(size, fn(x) { x }), size: size)
   let result = knot_hash(1, lengths, hash)
-  let fisrt = hash_get(result, 0)
+  let first = hash_get(result, 0)
   let second = hash_get(result, 1)
-  fisrt * second
+  first * second
 }
 
 pub fn part1(s: String) {

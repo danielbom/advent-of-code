@@ -1,5 +1,4 @@
 import gleeunit
-import gleeunit/should
 
 import gleam/list
 
@@ -18,7 +17,7 @@ pub fn knot_hash_check_test() {
   list.map(inputs, fn(p) {
     let #(input, size, expected) = p
     let result = day_10.knot_hash_check(input, size)
-    should.equal(result, expected)
+    assert result == expected
   })
 }
 
@@ -33,6 +32,6 @@ pub fn part2_test() {
   list.map(inputs, fn(p) {
     let #(input, expected) = p
     let result = day_10.part2(input)
-    should.equal(result, expected)
+    assert result == expected
   })
 }

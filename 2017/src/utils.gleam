@@ -1,7 +1,6 @@
 import gleam/float
 import gleam/int
 import gleam/io
-import gleam/string
 
 import gleam/time/duration
 import gleam/time/timestamp
@@ -25,6 +24,6 @@ pub fn time_it(name: String, func: fn() -> String) {
     { int.to_float(duration_secs) *. 1.0e3 }
     +. { int.to_float(duration_nanos) /. 1.0e6 }
   let message =
-    string.concat([name, ": ", result, " [", float.to_string(milis), "ms]"])
+    name <> ": " <> result <> " [" <> float.to_string(milis) <> "ms]"
   io.println(message)
 }
