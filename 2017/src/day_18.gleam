@@ -2,7 +2,6 @@ import gleam/dict.{type Dict}
 import gleam/int
 import gleam/io
 import gleam/list
-import gleam/result
 import gleam/string
 
 import utils
@@ -29,6 +28,7 @@ fn parse_regval(arg: String) -> RegVal {
   }
 }
 
+/// Convert input text into a list of instructions
 fn parse(s: String) {
   string.trim(s)
   |> string.split(on: "\n")
@@ -101,6 +101,7 @@ type SndRcv {
   OnNone
 }
 
+/// Execute a single instruction
 fn execute_once(registers, instruction) {
   case instruction {
     Set(register, regval) -> {
@@ -140,12 +141,12 @@ fn execute_once(registers, instruction) {
   }
 }
 
+/// Executes instructions in a loop until receiving a value
 fn execute_loop(
   instructions: Dict(Int, Instruction),
   pc: Int,
   registers: Dict(String, Int),
   played: List(Int),
-  intercept,
 ) {
   case dict.get(instructions, pc) {
     Error(_) -> Error(Nil)
@@ -154,24 +155,24 @@ fn execute_loop(
       let pc = pc + jump
       case snd_rcv {
         OnNone -> {
-          execute_loop(instructions, pc, registers, played, intercept)
+          execute_loop(instructions, pc, registers, played)
         }
         OnSnd(regval) -> {
           let value = get_regval_value(registers, regval)
           let played = [value, ..played]
-          execute_loop(instructions, pc, registers, played, intercept)
+          execute_loop(instructions, pc, registers, played)
         }
         OnRcv(register) -> {
           let value = get_register_value(registers, register)
           let continue = case played, value == 0 {
             _, True -> Error(Nil)
             [], False -> Error(Nil)
-            [last, ..], _ -> intercept(last)
+            [last, ..], _ if last != 0 -> Ok(last)
+            _, _ -> Error(Nil)
           }
           case continue {
             Ok(result) -> Ok(result)
-            Error(_) ->
-              execute_loop(instructions, pc + 1, registers, played, intercept)
+            Error(_) -> execute_loop(instructions, pc + 1, registers, played)
           }
         }
       }
@@ -181,13 +182,8 @@ fn execute_loop(
 
 fn execute(instructions: List(Instruction)) {
   let instructions = index_instructions(instructions)
-  execute_loop(instructions, 0, dict.new(), [], fn(value) {
-    case value != 0 {
-      True -> Ok(value)
-      False -> Error(Nil)
-    }
-  })
-  |> result.unwrap(0)
+  let assert Ok(result) = execute_loop(instructions, 0, dict.new(), [])
+  result
 }
 
 pub fn part1(s: String) {
@@ -211,6 +207,7 @@ type Proc {
   )
 }
 
+/// Execute one instruction of a process, handling message passing
 fn execute_duo_once(instructions: Dict(Int, Instruction), proc: Proc) {
   case proc.waiting, proc.queue {
     [_], [] -> #([], proc)
@@ -260,6 +257,23 @@ fn execute_duo_once(instructions: Dict(Int, Instruction), proc: Proc) {
   }
 }
 
+/// Executes both processes in lockstep until termination or deadlock.
+///
+/// Each process runs one step, producing outbound messages that are
+/// appended to the peer queue after both executions complete.
+///
+/// Deadlock occurs when:
+/// - both processes are waiting; and
+/// - both message queues are empty.
+///
+/// NOTE:
+/// I previously attempted to model this with actors (`gleam_otp`), but
+/// synchronization issues introduced race conditions that caused
+/// nondeterministic results.
+///
+/// I would like to revisit that approach in the future, possibly with a
+/// stronger synchronization primitive or explicit barrier between the
+/// "waiting for input" states of both processes.
 fn execute_duo_loop(
   instructions: Dict(Int, Instruction),
   proc0: Proc,
