@@ -52,7 +52,7 @@ pub fn part1_test() {
     #("sw,n,s,ne,nw,se,sw", 1),
   ]
 
-  list.map(inputs, fn(p) {
+  list.each(inputs, fn(p) {
     let #(input, expected) = p
     let result = day_11.part1(input)
     assert result == expected
@@ -103,7 +103,7 @@ pub fn part2_test() {
     #("sw,n,s,ne,nw,se,sw", 1),
   ]
 
-  list.map(inputs, fn(p) {
+  list.each(inputs, fn(p) {
     let #(input, expected) = p
     let result = day_11.part2(input)
     assert result == expected

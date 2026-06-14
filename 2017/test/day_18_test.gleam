@@ -22,7 +22,7 @@ set a 1
 jgz a -2"
   let inputs = [#(input, 4)]
 
-  list.map(inputs, fn(p) {
+  list.each(inputs, fn(p) {
     let #(input, expected) = p
     let result = day_18.part1(input)
     assert result == expected
@@ -40,7 +40,7 @@ rcv c
 rcv d"
   let inputs = [#(input, 3)]
 
-  list.map(inputs, fn(p) {
+  list.each(inputs, fn(p) {
     let #(input, expected) = p
     let result = day_18.part2(input)
     assert result == expected

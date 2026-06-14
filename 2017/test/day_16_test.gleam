@@ -22,7 +22,7 @@ pub fn parse_and_dance_test() {
     #("s1,x3/4,pe/b", 8, "abcde"),
   ]
 
-  list.map(inputs, fn(p) {
+  list.each(inputs, fn(p) {
     let #(input, repeat, expected) = p
     let result = day_16.parse_and_dance(input, "abcde", repeat)
     assert result == expected

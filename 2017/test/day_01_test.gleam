@@ -17,7 +17,7 @@ pub fn part1_test() {
     #("91212129", 9),
   ]
 
-  list.map(inputs, fn(p) {
+  list.each(inputs, fn(p) {
     let #(input, expected) = p
     let result = day_01.part1(input)
     assert result == expected
@@ -33,7 +33,7 @@ pub fn part2_test() {
     #("12131415", 4),
   ]
 
-  list.map(inputs, fn(p) {
+  list.each(inputs, fn(p) {
     let #(input, expected) = p
     let result = day_01.part2(input)
     assert result == expected

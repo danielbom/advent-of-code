@@ -14,7 +14,7 @@ pub fn knot_hash_check_test() {
     #([3, 4, 1, 5], 5, 12),
   ]
 
-  list.map(inputs, fn(p) {
+  list.each(inputs, fn(p) {
     let #(input, size, expected) = p
     let result = day_10.knot_hash_check(input, size)
     assert result == expected
@@ -29,7 +29,7 @@ pub fn part2_test() {
     #("1,2,4", "63960835bcdc130f0b66d7ff4f6a5a8e"),
   ]
 
-  list.map(inputs, fn(p) {
+  list.each(inputs, fn(p) {
     let #(input, expected) = p
     let result = day_10.part2(input)
     assert result == expected

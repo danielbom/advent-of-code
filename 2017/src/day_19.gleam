@@ -38,7 +38,7 @@ fn parse_loop(chars, row, col, tiles) {
   }
 }
 
-fn parse(s: String) -> Grid {
+pub fn parse(s: String) -> Grid {
   let chars = string.to_graphemes(s)
   let tiles = parse_loop(chars, 0, 0, dict.new())
   let #(rows, cols) =

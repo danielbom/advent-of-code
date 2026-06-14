@@ -15,7 +15,7 @@ aa bb cc dd aa
 aa bb cc dd aaa"
   let inputs = [#(input, 2)]
 
-  list.map(inputs, fn(p) {
+  list.each(inputs, fn(p) {
     let #(input, expected) = p
     let result = day_04.part1(input)
     assert result == expected
@@ -31,7 +31,7 @@ iiii oiii ooii oooi oooo
 oiii ioii iioi iiio"
   let inputs = [#(input, 3)]
 
-  list.map(inputs, fn(p) {
+  list.each(inputs, fn(p) {
     let #(input, expected) = p
     let result = day_04.part2(input)
     assert result == expected

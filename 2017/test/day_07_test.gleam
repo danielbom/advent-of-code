@@ -25,7 +25,7 @@ gyxo (61)
 cntj (57)"
   let inputs = [#(input, "tknk")]
 
-  list.map(inputs, fn(p) {
+  list.each(inputs, fn(p) {
     let #(input, expected) = p
     let result = day_07.part1(input)
     assert result == expected
@@ -49,7 +49,7 @@ gyxo (61)
 cntj (57)"
   let inputs = [#(input, 60)]
 
-  list.map(inputs, fn(p) {
+  list.each(inputs, fn(p) {
     let #(input, expected) = p
     let result = day_07.part2(input)
     assert result == expected
