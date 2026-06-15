@@ -26,6 +26,7 @@ fn parse(s: String) -> Array(Int) {
 
 /// Counts the steps required to exit the jump instructions,
 /// increasing each visited offset by `1`.
+/// @external(javascript, "./day_05_ffi.mjs", "countSteps1")
 fn count_steps_1(steps: Int, index: Int, view: Array(Int)) -> Int {
   case iv.get(view, index) {
     Ok(count) -> {
@@ -44,6 +45,7 @@ pub fn part1(s: String) -> Int {
 ///
 /// Visited offsets greater than or equal to `3` are decreased by `1`;
 /// otherwise they are increased by `1`.
+/// @external(javascript, "./day_05_ffi.mjs", "countSteps2")
 fn count_steps_2(steps: Int, index: Int, view: Array(Int)) -> Int {
   case iv.get(view, index) {
     Ok(count) -> {
