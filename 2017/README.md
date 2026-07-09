@@ -31,6 +31,9 @@ gleam format
 - [gleam packages](https://packages.gleam.run/)
 - [learnxinyminutes - gleam](https://learnxinyminutes.com/gleam/)
 - [Using use in Gleam](https://erikarow.land/notes/using-use-gleam)
+- [A brief interlude into Gleam concurrency](https://josh.is-cool.dev/a-brief-interlude-into-gleam-concurrency/)
 
 - [iv - persistent array structure](https://gitlab.com/arkandos/iv)
 - [gleamy_structures - Data structures](https://github.com/schurhammer/gleamy_structures)
+
+- [AoC 2017 Solutions](https://github.com/narimiran/AdventOfCode2017)
