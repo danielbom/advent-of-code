@@ -1,0 +1,37 @@
+                # C language syntax
+                # long a, b, c, d, e, f, g, h;
+                # a = b = c = d = e = f = g = h = 0;
+                # a = 1;
+set b 57        # _1: b = 57;
+set c b         # _2: c = b;
+jnz a 2         # _3: if (a) goto _5;
+jnz 1 5         # _4: goto _9;
+mul b 100       # _5: b = b * 100;
+sub b -100000   # _6: b = b - -100000;
+set c b         # _7: c = b;
+sub c -17000    # _8: c = c - -17000;
+set f 1         # _9: f = 1;
+set d 2         # _10: d = 2;
+set e 2         # _11: e = 2;
+set g d         # _12: g = d;
+mul g e         # _13: g = g * e;
+sub g b         # _14: g = g - b;
+jnz g 2         # _15: if (g) goto _17;
+set f 0         # _16: f = 0;
+sub e -1        # _17: e = e - -1;
+set g e         # _18: g = e;
+sub g b         # _19: g = g - b;
+jnz g -8        # _20: if (g) goto _12;
+sub d -1        # _21: d = d - -1;
+set g d         # _22: g = d;
+sub g b         # _23: g = g - b;
+jnz g -13       # _24: if (g) goto _11;
+jnz f 2         # _25: if (f) goto _27;
+sub h -1        # _26: h = h - -1;
+set g b         # _27: g = b;
+sub g c         # _28: g = g - c;
+jnz g 2         # _29: if (g) goto _31;
+jnz 1 3         # _30: goto _33;
+sub b -17       # _31: b = b - -17;
+jnz 1 -23       # _32: goto _9;
+                # _33:
