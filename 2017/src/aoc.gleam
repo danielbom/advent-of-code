@@ -27,6 +27,7 @@ import day_20
 import day_21
 import day_22
 import day_23
+import day_24
 
 fn foreach(begin: Int, end: Int, func: fn(Int) -> Nil) -> Nil {
   case begin <= end {
@@ -64,7 +65,7 @@ fn run(day: Int) -> Nil {
     21 -> day_21.solve()
     22 -> day_22.solve()
     23 -> day_23.solve()
-    24 -> Nil
+    24 -> day_24.solve()
     25 -> Nil
     _ -> panic as "invalid day"
   }
